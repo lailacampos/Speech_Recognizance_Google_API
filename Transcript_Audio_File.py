@@ -12,6 +12,7 @@ from FileExceptions import FileExceptions
 
 # r = sr.Recognizer()
 
+
 def read_file(recognizer):
     global fname
     fname = input(Const.TYPE_FILE_NAME)
@@ -54,11 +55,11 @@ def check_file_name(file_name):
     return file_name
 
 
-def transcrip_file(recognizer, audio):
+def transcript_file(recognizer, audio):
     global fname
     global complete_fname
 
-    save_path = '.\Transcripts'
+    save_path = '.\\Transcripts'
 
     # All recognize_*() methods of the Recognizer class require an audio_data argument.
     # audio_data must be an instance of SpeechRecognition’s AudioData class.
@@ -81,5 +82,5 @@ def transcrip_file(recognizer, audio):
 def save_file(text):
     global complete_fname
 
-    with open(complete_fname) as txt_file:
+    with open(complete_fname, 'w') as txt_file:
         txt_file.write(text)
