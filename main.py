@@ -90,27 +90,27 @@ def save_file():
     txt_file.write(text)
     txt_file.close()
 
+if __name__ == '__main__':
+    while True:
 
-while True:
-
-    # The purpose of a Recognizer instance is to recognize speech.
-    r = sr.Recognizer()
-    print(Const.QUESTION_AUDIO_MICROPHONE)
-    choice = input(Const.QUESTION_CHOICES)
-    if choice == '3':
-        print(Const.CLOSING_PROGRAM)
-        break
-    elif choice == '1':
-        audio = read_file()
-    elif choice == '2':
-        audio = listen_microphone()
-    try:
-        transcript_file()
+        # The purpose of a Recognizer instance is to recognize speech.
+        r = sr.Recognizer()
+        print(Const.QUESTION_AUDIO_MICROPHONE)
+        choice = input(Const.QUESTION_CHOICES)
+        if choice == '3':
+            print(Const.CLOSING_PROGRAM)
+            break
+        elif choice == '1':
+            audio = read_file()
+        elif choice == '2':
+            audio = listen_microphone()
         try:
-            save_file()
+            transcript_file()
+            try:
+                save_file()
+            except:
+                FileExceptions.print_file_exception()
         except:
-            FileExceptions.print_file_exception()
-    except:
-        FileExceptions.print_general_exception()
+            FileExceptions.print_general_exception()
 
-raise SystemExit()
+    raise SystemExit()
