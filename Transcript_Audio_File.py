@@ -7,42 +7,71 @@
 
 import speech_recognition as sr
 import os
+from Slice_Audio_File import *
 from Const import Const
-from FileExceptions import FileExceptions
+from FileExceptions import *
 
-# r = sr.Recognizer()
+fname = ''
 
 
-def read_file(recognizer):
+def set_fname(file_name):
     global fname
-    fname = input(Const.TYPE_FILE_NAME)
-    fpath = '.\\Audio' + '\\' + fname  # Relative file path
-    audio_file = sr.AudioFile(fpath)
+    fname = file_name
+
+
+def read_single_file(recognizer, complete_fname):
+
+    audio_file = sr.AudioFile(complete_fname)
 
     #  Opens the file and reads its contents, storing the data in an AudioFile instance called source.
     #  Then the record() method records the data from the entire file into an AudioData instance, audio.
     with audio_file as source:
-
         # r -> speech_recognition.Recognizer() instance
         recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.record(source)
     return audio
 
 
+def read_multiple_files(recognizer):
+    global fname
+
+    audio_list = []
+    fname = check_file_name(fname).replace('.txt', '')
+    directory_path = f'.\\Sliced_Audio_Files\\{fname}'
+
+    # Check if directory exists
+    if Path(directory_path).is_dir():
+        i = 0
+        complete_fpath = directory_path + '\\' + f'audio{i}.wav'
+        while Path(complete_fpath).is_file():
+            audio_file = sr.AudioFile(complete_fpath)
+
+            with audio_file as source:
+                recognizer.adjust_for_ambient_noise(source)
+                audio = recognizer.record(source)
+            audio_list.append(audio)
+            i += 1
+            complete_fpath = directory_path + '\\' + f'audio{i}.wav'
+    return audio_list
+
+
 def listen_microphone(recognizer):
     global fname
 
-    # Just like the AudioFile class, Microphone is a context manager.
-    mic = sr.Microphone()
-    with mic as source:
-        print(Const.LISTENING)
-        recognizer.adjust_for_ambient_noise(source)
+    try:
+        # Just like the AudioFile class, Microphone is a context manager.
+        mic = sr.Microphone()
+        with mic as source:
+            print(Const.LISTENING)
+            recognizer.adjust_for_ambient_noise(source)
 
-        # Capture input from the microphone using the listen() method of the Recognizer class.
-        # Records input from the source until silence is detected.
-        audio = recognizer.listen(source)
-    fname = 'recording'
-    return audio
+            # Capture input from the microphone using the listen() method of the Recognizer class.
+            # Records input from the source until silence is detected.
+            audio = recognizer.listen(source)
+        fname = 'recording'
+        return audio
+    except:
+        raise MicrophoneException
 
 
 # Checks if the file name contains the file type. If so, removes it.
@@ -55,9 +84,51 @@ def check_file_name(file_name):
     return file_name
 
 
-def transcript_file(recognizer, audio):
-    global fname
-    global complete_fname
+def check_file_size(recognizer, fname, complete_fname):
+    # global complete_fname
+    text = ''
+
+    file_size_bytes = Path(complete_fname).stat().st_size
+    file_size_mb = file_size_bytes / 1024 * 1024
+    file_length = check_file_length(complete_fname)
+
+    # Check if file larger than 10Mb or if file length more than 60 minutes
+    if file_size_mb > 10000000 or file_length > 3600:
+        try:
+            sliced_audio_list = slice_audio(complete_fname)
+            export_audio_slices(sliced_audio_list, complete_fname)
+
+            try:
+                audio_list = read_multiple_files(recognizer)
+                text = transcript_multiple_files(recognizer, audio_list)
+                print('Arquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.')
+            except:
+                raise TranscriptMultipleFiles()
+        except:
+            raise TranscriptFileError()
+    else:
+        try:
+            audio = read_single_file(recognizer, complete_fname)
+            text = transcript_single_file(recognizer, audio, fname, complete_fname)
+        except:
+            raise TranscriptSingleFile()
+
+    return text
+
+
+# Checks if file already exists
+def check_if_file_exists(fname, complete_fname):
+    # global fname
+
+    if os.path.exists(complete_fname):
+        fname = input(Const.FILE_ALREADY_EXISTS)
+        fname = check_file_name(fname)
+        complete_fname = os.path.join('.\\Transcripts', fname)
+
+
+def transcript_single_file(recognizer, audio, fname, complete_fname):
+    # global fname
+    # global complete_fname
 
     save_path = '.\\Transcripts'
 
@@ -66,21 +137,24 @@ def transcript_file(recognizer, audio):
     # An AudioData instance can come from two sources: from an audio file or audio recorded by a microphone.
     text = recognizer.recognize_google(audio, language='pt-BR')
     print(Const.YOU_SAID, text, '\n')
-
-    fname = check_file_name(fname)
-    complete_fname = os.path.join(save_path, fname)
-
-    # Checks if file already exists
-    if os.path.exists(complete_fname):
-        fname = input(Const.FILE_ALREADY_EXISTS)
-        fname = check_file_name(fname)
-        complete_fname = os.path.join(save_path, fname)
-    print(Const.FILE_SAVED + fname + '\n')
     return text
 
 
-def save_file(text):
+def transcript_multiple_files(recognizer, audio_slices_list):
+    global fname
     global complete_fname
 
-    with open(complete_fname, 'w') as txt_file:
-        txt_file.write(text)
+    text = ''
+    save_path = '.\\Transcripts'
+
+    for audio in audio_slices_list:
+        text += recognizer.recognize_google(audio, language='pt-BR') + '\n'
+    return text
+
+
+def save_file(text, complete_fname):
+    try:
+        with open(complete_fname, 'w') as txt_file:
+            txt_file.write(text)
+    except:
+        raise WriteFileException

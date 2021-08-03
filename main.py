@@ -10,7 +10,7 @@ import os
 
 import Transcript_Audio_File
 from Const import Const
-from FileExceptions import FileExceptions
+from FileExceptions import *
 from Transcript_Audio_File import *
 
 fname = ''
@@ -28,16 +28,27 @@ if __name__ == '__main__':
             print(Const.CLOSING_PROGRAM)
             break
         elif choice == '1':
-            audio = read_file(r)
+            fname = input(Const.TYPE_FILE_NAME)
+            set_fname(fname)
+            complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
+            try:
+                # audio = read_single_file(r, complete_fname)
+                check_file_size(r, fname, complete_fname)
+
+                try:
+                    save_file(text, complete_fname)
+                except:
+                    raise WriteFileException()
+            except:
+                raise GeneralException
         elif choice == '2':
             audio = listen_microphone(r)
-        try:
-            text = transcript_file(r, audio)
+            set_fname('recording')
+            complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
+            text = check_file_size(r, fname, complete_fname)
             try:
-                save_file(text)
+                save_file(text, complete_fname)
             except:
-                FileExceptions.print_file_exception()
-        except:
-            FileExceptions.print_general_exception()
+                raise WriteFileException()
 
     raise SystemExit()
