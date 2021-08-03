@@ -84,6 +84,8 @@ def check_file_name(file_name):
     return file_name
 
 
+# Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts
+# multiple slices files
 def check_file_size(recognizer, fname, complete_fname):
     # global complete_fname
     text = ''

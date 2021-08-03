@@ -22,6 +22,8 @@ if __name__ == '__main__':
 
         # The purpose of a Recognizer instance is to recognize speech.
         r = sr.Recognizer()
+
+        # Menu that asks the user to choose between transcribing an audio file or using the microphone
         print(Const.QUESTION_AUDIO_MICROPHONE)
         choice = input(Const.QUESTION_CHOICES)
         if choice == '3':
@@ -32,6 +34,9 @@ if __name__ == '__main__':
             set_fname(fname)
             complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
             try:
+
+                # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or
+                # transcripts multiple slices files
                 # audio = read_single_file(r, complete_fname)
                 check_file_size(r, fname, complete_fname)
 
