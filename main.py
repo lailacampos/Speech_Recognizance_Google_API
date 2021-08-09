@@ -34,13 +34,17 @@ if __name__ == '__main__':
             set_fname(fname)
             complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
             try:
-
-                # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or
-                # transcripts multiple slices files
-                # audio = read_single_file(r, complete_fname)
-                check_file_size(r, fname, complete_fname)
+                if os.path.isfile(complete_fname):
+                    # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or
+                    # transcripts multiple slices files
+                    # audio = read_single_file(r, complete_fname)
+                    text = check_file_size(r, fname, complete_fname)
+                else:
+                    print('O arquivo não foi encontrado.\nPor favor digite o nome de um arquivo válido:\n')
 
                 try:
+                    fname = check_file_name(fname)
+                    complete_fname = ".\\Transcripts\\" + fname
                     save_file(text, complete_fname)
                 except:
                     raise WriteFileException()
@@ -48,10 +52,17 @@ if __name__ == '__main__':
                 raise GeneralException
         elif choice == '2':
             audio = listen_microphone(r)
-            set_fname('recording')
+            fname = 'recording.wav'
+            set_fname(fname)
             complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
-            text = check_file_size(r, fname, complete_fname)
             try:
+                export_audio_file(complete_fname, audio)
+            except:
+                raise ExportAudioFileException
+            try:
+                text = check_file_size(r, fname, complete_fname)
+                fname = check_file_name(fname)
+                complete_fname = ".\\Transcripts\\" + fname
                 save_file(text, complete_fname)
             except:
                 raise WriteFileException()

@@ -14,13 +14,20 @@ from FileExceptions import *
 fname = ''
 
 
+def export_audio_file(audio_path, audio_obj):
+    try:
+        with open(audio_path, 'wb') as file:
+            file.write(audio_obj.get_wav_data())
+    except:
+        raise WriteFileException
+
+
 def set_fname(file_name):
     global fname
     fname = file_name
 
 
 def read_single_file(recognizer, complete_fname):
-
     audio_file = sr.AudioFile(complete_fname)
 
     #  Opens the file and reads its contents, storing the data in an AudioFile instance called source.
@@ -67,8 +74,7 @@ def listen_microphone(recognizer):
 
             # Capture input from the microphone using the listen() method of the Recognizer class.
             # Records input from the source until silence is detected.
-            audio = recognizer.listen(source)
-        fname = 'recording'
+            audio = recognizer.listen(source, timeout=5)
         return audio
     except:
         raise MicrophoneException
@@ -90,9 +96,12 @@ def check_file_size(recognizer, fname, complete_fname):
     # global complete_fname
     text = ''
 
-    file_size_bytes = Path(complete_fname).stat().st_size
-    file_size_mb = file_size_bytes / 1024 * 1024
-    file_length = check_file_length(complete_fname)
+    try:
+        file_size_bytes = Path(complete_fname).stat().st_size
+        file_size_mb = file_size_bytes / 1024 * 1024
+        file_length = check_file_length(complete_fname)
+    except Exception:
+        raise FileDoesNotExistException
 
     # Check if file larger than 10Mb or if file length more than 60 minutes
     if file_size_mb > 10000000 or file_length > 3600:
@@ -111,7 +120,7 @@ def check_file_size(recognizer, fname, complete_fname):
     else:
         try:
             audio = read_single_file(recognizer, complete_fname)
-            text = transcript_single_file(recognizer, audio, fname, complete_fname)
+            text = transcript_single_file(recognizer, audio)
         except:
             raise TranscriptSingleFile()
 
@@ -128,11 +137,7 @@ def check_if_file_exists(fname, complete_fname):
         complete_fname = os.path.join('.\\Transcripts', fname)
 
 
-def transcript_single_file(recognizer, audio, fname, complete_fname):
-    # global fname
-    # global complete_fname
-
-    save_path = '.\\Transcripts'
+def transcript_single_file(recognizer, audio):
 
     # All recognize_*() methods of the Recognizer class require an audio_data argument.
     # audio_data must be an instance of SpeechRecognition’s AudioData class.

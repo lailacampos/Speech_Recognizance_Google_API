@@ -44,3 +44,15 @@ class MicrophoneException(Exception):
         super().__init__(self.msg)
 
 
+class ExportAudioFileException(Exception):
+    def __init__(self, msg='Error while writing audio file to disk'):
+        self.msg = msg
+        super().__init__(self.msg)
+
+
+class FileDoesNotExistException(Exception):
+    def __init__(self, msg='Error while opening file: File does not exist.'):
+        self.msg = msg
+        super().__init__(self.msg)
+
+
