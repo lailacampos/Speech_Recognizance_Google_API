@@ -38,7 +38,7 @@ if __name__ == '__main__':
                     # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or
                     # transcripts multiple slices files
                     # audio = read_single_file(r, complete_fname)
-                    text = check_file_size(r, fname, complete_fname)
+                    text = check_file_size(r, complete_fname)
                 else:
                     print('O arquivo não foi encontrado.\nPor favor digite o nome de um arquivo válido:\n')
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
             except:
                 raise ExportAudioFileException
             try:
-                text = check_file_size(r, fname, complete_fname)
+                text = check_file_size(r, complete_fname)
                 fname = check_file_name(fname)
                 complete_fname = ".\\Transcripts\\" + fname
                 save_file(text, complete_fname)

@@ -92,9 +92,7 @@ def check_file_name(file_name):
 
 # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts
 # multiple slices files
-def check_file_size(recognizer, fname, complete_fname):
-    # global complete_fname
-    text = ''
+def check_file_size(recognizer, complete_fname):
 
     try:
         file_size_bytes = Path(complete_fname).stat().st_size
@@ -128,8 +126,7 @@ def check_file_size(recognizer, fname, complete_fname):
 
 
 # Checks if file already exists
-def check_if_file_exists(fname, complete_fname):
-    # global fname
+def check_if_file_exists(complete_fname):
 
     if os.path.exists(complete_fname):
         fname = input(Const.FILE_ALREADY_EXISTS)
@@ -148,11 +145,7 @@ def transcript_single_file(recognizer, audio):
 
 
 def transcript_multiple_files(recognizer, audio_slices_list):
-    global fname
-    global complete_fname
-
     text = ''
-    save_path = '.\\Transcripts'
 
     for audio in audio_slices_list:
         text += recognizer.recognize_google(audio, language='pt-BR') + '\n'
