@@ -6,11 +6,6 @@
 # https://realpython.com/python-speech-recognition/
 
 import speech_recognition as sr
-import os
-
-import Transcript_Audio_File
-from Const import Const
-from FileExceptions import *
 from Transcript_Audio_File import *
 
 fname = ''

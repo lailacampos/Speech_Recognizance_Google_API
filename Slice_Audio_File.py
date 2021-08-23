@@ -68,12 +68,13 @@ def slice_audio(fpath):
 
         chunks = make_chunks(audio, chuck_len_in_ms)
 
-    except:
+    except Exception:
         raise SliceFileException()
 
     return chunks
 
 
+# Checks if directory inside 'Sliced_Audio_Files' exists
 def check_directory(fpath):
     file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
     fname = fpath.replace('.\\Audio\\', '')
@@ -95,7 +96,7 @@ def export_audio_slices(audio_slices_list, fpath):
             print(f'Salvando arquivo {chunk_name}')
             directory = check_directory(fpath)
             chunk.export(directory + '\\' + chunk_name, format='wav')
-    except:
+    except Exception:
         raise WriteFileException()
 
 

@@ -13,12 +13,12 @@ from FileExceptions import *
 
 fname = ''
 
-
+# Saves audio file to disk
 def export_audio_file(audio_path, audio_obj):
     try:
         with open(audio_path, 'wb') as file:
             file.write(audio_obj.get_wav_data())
-    except:
+    except Exception:
         raise WriteFileException
 
 
@@ -76,7 +76,7 @@ def listen_microphone(recognizer):
             # Records input from the source until silence is detected.
             audio = recognizer.listen(source, timeout=5)
         return audio
-    except:
+    except Exception:
         raise MicrophoneException
 
 
@@ -90,9 +90,11 @@ def check_file_name(file_name):
     return file_name
 
 
+# TODO Modularize function (it's too big and it does multiple stuff right now. It needs to be split into multiple functions)
 # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts
 # multiple slices files
 def check_file_size(recognizer, complete_fname):
+    global fname
 
     try:
         file_size_bytes = Path(complete_fname).stat().st_size
@@ -109,29 +111,30 @@ def check_file_size(recognizer, complete_fname):
 
             try:
                 audio_list = read_multiple_files(recognizer)
-                text = transcript_multiple_files(recognizer, audio_list)
-                print('Arquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.')
-            except:
+                text = transcript_multiple_files(recognizer, audio_list, fname)
+                print('Arquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.\n'
+                      'O arquivo de texto encontra-se na pasta "Transcripts"')
+            except Exception:
                 raise TranscriptMultipleFiles()
-        except:
+        except Exception:
             raise TranscriptFileError()
     else:
         try:
             audio = read_single_file(recognizer, complete_fname)
             text = transcript_single_file(recognizer, audio)
-        except:
+        except Exception:
             raise TranscriptSingleFile()
 
     return text
 
 
 # Checks if file already exists
-def check_if_file_exists(complete_fname):
-
-    if os.path.exists(complete_fname):
-        fname = input(Const.FILE_ALREADY_EXISTS)
-        fname = check_file_name(fname)
-        complete_fname = os.path.join('.\\Transcripts', fname)
+# def check_if_file_exists(complete_fname):
+#
+#     if os.path.exists(complete_fname):
+#         fname = input(Const.FILE_ALREADY_EXISTS)
+#         fname = check_file_name(fname)
+#         complete_fname = os.path.join('.\\Transcripts', fname)
 
 
 def transcript_single_file(recognizer, audio):
@@ -144,11 +147,19 @@ def transcript_single_file(recognizer, audio):
     return text
 
 
-def transcript_multiple_files(recognizer, audio_slices_list):
+def transcript_multiple_files(recognizer, audio_slices_list, fname):
     text = ''
+    fname = check_file_name(fname)
+    complete_fname = ".\\Transcripts\\" + fname
 
-    for audio in audio_slices_list:
-        text += recognizer.recognize_google(audio, language='pt-BR') + '\n'
+    for index, audio in enumerate(audio_slices_list):
+        try:
+            text += f'audio{index} - ' + recognizer.recognize_google(audio, language='pt-BR') + '\n\n'
+        except Exception as e:
+            print(f'\n\nUm erro aconteceu ao transcrever o arquivo audio{index}.\nGoogle não entendeu o áudio.\n'
+                  f'Por favor, tente novamente após tratar o arquivo.\n')
+            print(f'Exceção: {e}\n')
+        save_file(text, complete_fname)
     return text
 
 
@@ -156,5 +167,5 @@ def save_file(text, complete_fname):
     try:
         with open(complete_fname, 'w') as txt_file:
             txt_file.write(text)
-    except:
+    except Exception:
         raise WriteFileException
