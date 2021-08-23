@@ -6,7 +6,6 @@
 # https://realpython.com/python-speech-recognition/
 
 import speech_recognition as sr
-import os
 from Slice_Audio_File import *
 from Const import Const
 from FileExceptions import *
@@ -129,15 +128,6 @@ def check_file_size(recognizer, complete_fname):
     return text
 
 
-# Checks if file already exists
-# def check_if_file_exists(complete_fname):
-#
-#     if os.path.exists(complete_fname):
-#         fname = input(Const.FILE_ALREADY_EXISTS)
-#         fname = check_file_name(fname)
-#         complete_fname = os.path.join('.\\Transcripts', fname)
-
-
 def transcript_single_file(recognizer, audio):
 
     # All recognize_*() methods of the Recognizer class require an audio_data argument.
@@ -148,6 +138,7 @@ def transcript_single_file(recognizer, audio):
     return text
 
 
+# Transcripts a list of audio files and saves the result of each file's transcript as it iterates through the list
 def transcript_multiple_files(recognizer, audio_slices_list, fname):
     text = ''
     fname = check_file_name(fname)

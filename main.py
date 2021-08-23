@@ -2,10 +2,11 @@
 # Library docs:
 # https://github.com/Uberi/speech_recognition/blob/master/reference/library-reference.rst
 
-# Tutorial:
+# Useful tutorial:
 # https://realpython.com/python-speech-recognition/
 
 import speech_recognition as sr
+import os
 from Transcript_Audio_File import *
 
 fname = ''
