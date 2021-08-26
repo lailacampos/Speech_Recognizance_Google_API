@@ -3,7 +3,10 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Transcripts/anatel_1.txt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/Transcripts/anatel_comerciais1.txt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/Transcripts/anatel_comerciais1.txt.txt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/Transcripts/anatel_entrevista1.txt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/Transcripts/anatel_radio_clandestina.txt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/Transcripts/noise.txt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/Transcripts/recording.txt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/Transcripts/tiranossauro.txt" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />

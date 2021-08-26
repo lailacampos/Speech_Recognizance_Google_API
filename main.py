@@ -1,3 +1,5 @@
+# Main revised script
+
 # Speech to text
 # Library docs:
 # https://github.com/Uberi/speech_recognition/blob/master/reference/library-reference.rst
@@ -5,19 +7,12 @@
 # Useful tutorial:
 # https://realpython.com/python-speech-recognition/
 
-import speech_recognition as sr
 import os
 from Transcript_Audio_File import *
-
-fname = ''
-complete_fname = ''
-text = ''
+from Listen_Microphone import ListenMicrophone
 
 if __name__ == '__main__':
     while True:
-
-        # The purpose of a Recognizer instance is to recognize speech.
-        r = sr.Recognizer()
 
         # Menu that asks the user to choose between transcribing an audio file or using the microphone
         print(Const.QUESTION_AUDIO_MICROPHONE)
@@ -26,41 +21,50 @@ if __name__ == '__main__':
             print(Const.CLOSING_PROGRAM)
             break
         elif choice == '1':
-            fname = input(Const.TYPE_FILE_NAME)
-            set_fname(fname)
-            complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
+
+            fname = input(Const.TYPE_FILE_NAME)  # fname = audio_file.wav
+            complete_fname = '.\\Audio\\' + fname  # Relative audio file path
+
             try:
+                transcript_audio_file = TranscriptAudioFile(fname, complete_fname)
+                # Checks if file exists
                 if os.path.isfile(complete_fname):
-                    # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or
-                    # transcripts multiple slices files
-                    # audio = read_single_file(r, complete_fname)
-                    text = check_file_size(r, complete_fname)
+                    # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts multiple
+                    # slices files.
+                    text = transcript_audio_file.determine_single_or_multiple_transcript()
+                    transcript_audio_file.fname = transcript_audio_file.fname.replace('.txt', '')
+                    try:
+                        # fname = audio_file.wav
+
+                        fname = transcript_audio_file.check_file_name()
+                        complete_fname = '.\\Transcripts\\' + fname + '.txt'
+                        transcript_audio_file.complete_fname = complete_fname
+                        transcript_audio_file.save_txt_file(text)
+                    except Exception:
+                        raise WriteFileException()
                 else:
-                    print('O arquivo não foi encontrado.\nPor favor digite o nome de um arquivo válido:\n')
+                    print('\nO arquivo não foi encontrado.\nPor favor digite o nome de um arquivo válido:\n')
+            except Exception:
+                raise TranscriptFileError()
 
-                try:
-                    fname = check_file_name(fname)
-                    complete_fname = ".\\Transcripts\\" + fname
-                    save_file(text, complete_fname)
-                except:
-                    raise WriteFileException()
-            except:
-                raise GeneralException
         elif choice == '2':
-            audio = listen_microphone(r)
+            listen_mic = ListenMicrophone()
+            audio = listen_mic.listen_microphone()
             fname = 'recording.wav'
-            set_fname(fname)
             complete_fname = '.\\Audio' + '\\' + fname  # Relative file path
-            try:
-                export_audio_file(complete_fname, audio)
-            except:
-                raise ExportAudioFileException
-            try:
-                text = check_file_size(r, complete_fname)
-                fname = check_file_name(fname)
-                complete_fname = ".\\Transcripts\\" + fname
-                save_file(text, complete_fname)
-            except:
-                raise WriteFileException()
+            transcript_audio_file = TranscriptAudioFile(fname, complete_fname)
 
+            try:
+                transcript_audio_file.export_audio_file(audio)
+            except Exception:
+                raise ExportAudioFileException()
+
+            try:
+                text = transcript_audio_file.determine_single_or_multiple_transcript()
+                fname = transcript_audio_file.check_file_name()
+                fname += '.txt'
+                transcript_audio_file.complete_fname = ".\\Transcripts\\" + fname
+                transcript_audio_file.save_txt_file(text)
+            except Exception:
+                raise WriteFileException()
     raise SystemExit()
