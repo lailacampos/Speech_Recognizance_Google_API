@@ -116,7 +116,7 @@ class TranscriptAudioFile:
                         f'Por favor, tente novamente após tratar o arquivo.\n'
             text += error_msg
             print(error_msg)
-            self.complete_fname = self.complete_fname.replace('.wav', '.txt')
+            self.complete_fname = (".\\Transcripts\\" + self.fname).replace('.wav', '.txt')
             self.save_txt_file(text)
             raise TranscriptSingleFile()
         finally:
