@@ -1,0 +1,5 @@
+# Ignore everything in this directory
+noise.wav
+
+# Except this very file
+!.gitignore
