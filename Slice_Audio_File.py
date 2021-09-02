@@ -36,7 +36,9 @@ class SliceAudioFile:
 
     # endregion
 
+    # Checks if directory exists
     def check_if_directory_exists(self):
+        '''Checa se o diretório existe'''
         file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
 
         # fpath = .\Audio\audio_file.wav
@@ -59,6 +61,9 @@ class SliceAudioFile:
     # Slices an audio file into several files of roughly 10Mb in size.
     # Returns a list with all slices of audio.
     def slice_audio(self):
+        '''Divide um arquivo de áudio em vários pedaços de aproximadamente 10mb de tamanho cada um.
+
+        Retorna uma lista com todas as fatias de áudio do áudio dividido'''
         try:
             # fpath = .\Audio\audio_file.wav
             audio = AudioSegment.from_wav(self.fpath)
@@ -102,6 +107,7 @@ class SliceAudioFile:
 
     # Exports audio slices
     def export_audio_slices(self, audio_slices_list):
+        '''Exporta os pedaços do áudio divido'''
 
         # fpath = .\Sliced_Audio_Files\audio_file
         directory = self.check_if_directory_exists()

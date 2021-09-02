@@ -1,4 +1,5 @@
 class Const:
+
     QUESTION_AUDIO_MICROPHONE = 'Você gostaria de transcrever de um arquivo de áudio ou usar o microfone? '
     QUESTION_CHOICES = '[1] - Arquivo de áudio \n[2] - Microfone \n[3] - Sair\n'
     CLOSING_PROGRAM = 'Até mais!'

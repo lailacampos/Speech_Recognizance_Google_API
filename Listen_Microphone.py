@@ -10,7 +10,9 @@ class ListenMicrophone:
     def __init__(self):
         self.recognizer = sr.Recognizer()
 
+    # Captures audio from default microphone
     def listen_microphone(self):
+        '''Captura áudio do microfone padrão'''
         try:
             # Just like the AudioFile class, Microphone is a context manager.
             mic = sr.Microphone()

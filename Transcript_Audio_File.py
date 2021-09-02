@@ -56,6 +56,7 @@ class TranscriptAudioFile:
 
     # Saves audio file to disk:
     def export_audio_file(self, audio_obj):
+        '''Salva arquivo de áudio no disco'''
         try:
             # audio_path = .\Audio\audio_file.wav
             with open(self.complete_fname, 'wb') as file:
@@ -65,6 +66,7 @@ class TranscriptAudioFile:
 
     # Checks if the file name contains the file type. If so, removes it.
     def check_file_name(self):
+        '''Checa se o nome do arquivo contém o tipo de arquivo. Caso contenha, remove o tipo de arquivo do nome'''
         file_name = self.fname
         file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
         for i in file_formats:
@@ -72,11 +74,11 @@ class TranscriptAudioFile:
             # fname = audio_file.wav
             if i in self.fname:
                 file_name = self.fname.replace(i, '')
-        # file_name += '.txt'
         return file_name
 
     # Checks an audio file length
     def check_file_lenght(self):
+        '''Checa a duração de um arquivo de áudio em milissegundos'''
 
         # The duration is equal to the number of frames divided by the framerate (frames per second).
         # complete_fname = .\Audio\audio_file.wav
@@ -88,6 +90,7 @@ class TranscriptAudioFile:
 
     # Checks file size
     def check_file_size(self):
+        '''Checa o tamanho do arquivo de áudio em bytes e megabytes'''
 
         # complete_fname = .\Audio\audio_file.wav
         file_size_bytes = Path(self.complete_fname).stat().st_size
@@ -96,6 +99,7 @@ class TranscriptAudioFile:
         return {'size_mb': file_size_mb, 'length': file_lenght}
 
     def save_txt_file(self, text):
+        '''Salva um arquivo de texto no disco'''
         try:
             # complete.fname = .\Transcripts\audio_file.txt
             with open(self.complete_fname, 'w') as txt_file:
@@ -104,6 +108,7 @@ class TranscriptAudioFile:
             raise WriteFileException()
 
     def transcript_single_file(self, audio):
+        '''Transcreve um único arquivo de áudio'''
         text = ''
         try:
             # All recognize_*() methods of the Recognizer class require an audio_data argument.
@@ -124,6 +129,8 @@ class TranscriptAudioFile:
 
     # Transcripts a list of audio files and saves the result of each file's transcript as it iterates through the list
     def transcript_multiple_files(self, audio_slices_list):
+        '''Transcreve uma lista de arquivos de áudio e salva o resultado da transcrição de cada arquivo dinamicamente'''
+
         text = ''
 
         # fname initially = audio_file.wav
@@ -152,6 +159,8 @@ class TranscriptAudioFile:
 
     # Decides whether the file needs to be sliced and either transcripts a single file or transcripts multiple slices files
     def determine_single_or_multiple_transcript(self):
+        '''Decide se o arquivo precisa ser dividido ou não, e a depender da decisão, chama a função que transcreve
+            um único arquivo ou a função que transcreve múltiplos arquivos de áudio'''
 
         # complete_fname = .\Audio\audio_file.wav
         size_length_dict = self.check_file_size()
