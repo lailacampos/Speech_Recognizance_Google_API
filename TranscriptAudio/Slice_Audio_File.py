@@ -42,11 +42,11 @@ class SliceAudioFile:
         file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
 
         # fpath = .\Audio\audio_file.wav
-        fname = self.fpath.replace('.\\TranscriptAudio\\Audio\\', '')
+        fname = self.fpath.replace('.\\Audio\\', '')
         for i in file_formats:
             if i in fname:
                 fname = fname.replace(i, '')
-        directory = '.\\TranscriptAudio\\Sliced_Audio_Files\\' + fname
+        directory = '.\\Sliced_Audio_Files\\' + fname
         if Path(directory).is_dir():
             print('Pasta já existe.')
         else:

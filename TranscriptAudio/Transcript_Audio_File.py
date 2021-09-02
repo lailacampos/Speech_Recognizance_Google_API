@@ -121,7 +121,7 @@ class TranscriptAudioFile:
                         f'Por favor, tente novamente após tratar o arquivo.\n'
             text += error_msg
             print(error_msg)
-            self.complete_fname = (".\\TranscriptAudio\\Transcripts\\" + self.fname).replace('.wav', '.txt')
+            self.complete_fname = (".\\Transcripts\\" + self.fname).replace('.wav', '.txt')
             self.save_txt_file(text)
             raise TranscriptSingleFile()
         finally:
@@ -138,7 +138,7 @@ class TranscriptAudioFile:
         self.fname += '.txt'
 
         # complete_fname = .\Transcripts\audio_file.txt
-        self.complete_fname = '.\\TranscriptAudio\\Transcripts\\' + self.fname
+        self.complete_fname = '.\\Transcripts\\' + self.fname
 
         try:
             for index, audio in enumerate(audio_slices_list):
