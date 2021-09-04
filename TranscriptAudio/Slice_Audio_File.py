@@ -11,7 +11,7 @@
 # import contextlib
 import math
 # import wave
-from FileExceptions import *
+from TranscriptAudio.FileExceptions import *
 from pathlib import Path
 from pydub import AudioSegment
 from pydub.utils import make_chunks, mediainfo
@@ -42,11 +42,11 @@ class SliceAudioFile:
         file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
 
         # fpath = .\Audio\audio_file.wav
-        fname = self.fpath.replace('.\\TranscriptAudio\\Audio\\', '')
+        fname = self.fpath.replace('..\\Audio\\', '')
         for i in file_formats:
             if i in fname:
                 fname = fname.replace(i, '')
-        directory = '.\\TranscriptAudio\\Sliced_Audio_Files\\' + fname
+        directory = '..\\Audio\\Sliced_Audio_Files\\' + fname
         if Path(directory).is_dir():
             print('Pasta já existe.')
         else:
