@@ -10,17 +10,38 @@ import stanza
 from TranscriptAudio.FileExceptions import *
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from Regex_Search import RegexSearch
+from AnalyseText.Regex_Search import RegexSearch
+from TranscriptAudio.FileExceptions import *
 
 
 class ProcessText:
 
-    def __init__(self, raw_text):
-        self._raw_text = raw_text
+    def __init__(self, text_file_name):
+        self._text_file_name = text_file_name
+        self._text_file_path = '.\\Transcripts\\' + text_file_name
+        self._raw_text = ""
         self._audio_keyword_dictionary = dict()
-        self._keyword_list = list()
+        self._keyword_list = ['frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
+                              'localizado', 'localizada', 'promoção', 'custo', 'compra', 'comprar', 'grátis', 'gratuito', 'reais', 'garantia',
+                              'preço', 'orçamento', 'revenda', 'brinde', 'comércio', 'comercio']
 
     # region Getters and Setters
+
+    @property
+    def text_file_name(self):
+        return self._text_file_name
+
+    @text_file_name.setter
+    def text_file_name(self, new_text_fname):
+        self._text_file_name = new_text_fname
+
+    @property
+    def text_file_path(self):
+        return self._text_file_path
+
+    @text_file_path.setter
+    def text_file_path(self, new_text_file):
+        self._text_file_path = new_text_file
 
     @property
     def raw_text(self):
@@ -40,7 +61,7 @@ class ProcessText:
 
     @property
     def keyword_list(self):
-        return self.keyword_list
+        return self._keyword_list
 
     @keyword_list.setter
     def keyword_list(self, new_kw_list):
@@ -48,12 +69,24 @@ class ProcessText:
 
     # endregion
 
+    """Opens and reads a text file"""
+
+    def open_txt_file(self):
+        """Abre e lê um arquivo de texto"""
+
+        try:
+            with open(self.text_file_path, 'r') as file:
+                self.raw_text = file.read()
+        except WriteFileException:
+            raise WriteFileException
+
     """Saves processed raw_text to a txt file located in the folder Results, inside package AnalyseText"""
+
     def save_txt_file(self, complete_fname, new_text):
         """Salva um texto processado em um arquivo txt localizado na pasta Results, dentro do pacote AnalyseText"""
 
         try:
-            # complete_fname = .\\Results\\fname.txt
+            # complete_file_path = .\\Results\\fname.txt
             with open(complete_fname, 'w') as file:
                 file.write(new_text)
         except WriteFileException as e:
@@ -62,30 +95,37 @@ class ProcessText:
     """Tokenization is the process of breaking up the original raw raw_text into component pieces which are known as tokens.
        Tokenização é o process de quebrar o texto original em pedaços conhecidos como tokens.
        Breaks a raw_text into a list of words"""
+
     def tokenize_raw_text(self):
         """Quebra um texto e o transforma em uma lista de palavras"""
+
         words = word_tokenize(self.raw_text)
         return words
 
     """Stopwords are words which are filtered out before or after processing of natural language data.
        Stopwords são palavras que são filtradas e retiradas do texto analisado antes ou depois do processamento de linguagem natural.
        Filters a list of words from stop words and returns a filtered list. Returns a filtered list."""
+
     def filter_stop_words(self):
         """Filtra um lista de palavras e remove stopwords. Devolve uma lista filtrada"""
+
         words = self.tokenize_raw_text()
         stop_words = set(stopwords.words('portuguese'))
         filtered_text_list = [word for word in words if word.casefold() not in stop_words]
         return filtered_text_list
 
     """Turns a list of word tokens into a string"""
+
     @staticmethod
     def turn_list_into_string(words_list):
         """Transforma uma lista de tokens (palavras) em uma string"""
+
         result_string = ' '.join(str(item) for item in words_list)
         return result_string
 
     """Lemmatization is the process of reducing words to their core meaning
     Lematização é o processo de reduzir palavras ao seu significado base"""
+
     @staticmethod
     # Takes a string and reduces all the words to their core meaning (lemmatize). Returns a list of lemmatized words.
     def lemmatize_text(filtered_text):
@@ -96,33 +136,42 @@ class ProcessText:
         lemmatized_words_list = [doc_word.lemma for sentence in doc.sentences for doc_word in sentence.words]
         return lemmatized_words_list
 
-    @staticmethod
-    def feed_keyword_list(keyword_word):
-        keyword_list = list()
-        keyword_list.append(keyword_word)
-        return keyword_list
+    # Adds a keyword to the list
+    def feed_keyword_list(self, keyword_word):
+        """Adiciona uma palavra chave à lista"""
+
+        self.keyword_list.append(keyword_word)
+
+    # Removes a keyword from the list
+    def remove_keyword_from_list(self, keyword_word):
+        """Remove uma palavra chave da lista"""
+
+        self.keyword_list.remove(keyword_word)
 
     """Concatenates two lists. Returns the resulting list"""
-    @staticmethod
-    def concatenate_key_words(keyword_list, lemmatized_keyword_list):
+
+    def concatenate_key_words(self, lemmatized_keyword_list):
         """Concatena duas listas. Retorna a lista resultante"""
 
-        full_keyword_string = list(set(keyword_list + lemmatized_keyword_list))
+        full_keyword_string = list(set(self.keyword_list + lemmatized_keyword_list))
         full_keyword_string.sort()
         return full_keyword_string
 
     """Takes a keyword word and appends it to a list of keywords. Returns a list of keywords"""
-    def create_keyword_complete_list(self, keyword_list):
+
+    def generate_keyword_complete_list(self):
         """Recebe uma palavra-chave a adiciona a uma lista de palavras-chaves. Retorna a lista de palavras-chaves"""
-        keyword_string = self.turn_list_into_string(keyword_list)
+
+        keyword_string = self.turn_list_into_string(self.keyword_list)
         lemmatized_keyword_list = self.lemmatize_text(keyword_string)
-        complete_kw_list = list(set(self.concatenate_key_words(keyword_list, lemmatized_keyword_list)))
+        complete_kw_list = list(set(self.concatenate_key_words(lemmatized_keyword_list)))
         return complete_kw_list
 
     """Iterates over a list of sentences and searches for keywords in each sentence. If no audio{number} keywords are found, returns a dictionary
     where key = sentence and value = set of keywords found.
     If audio{number} keywords are found, returns a dictionary where key = audio{number} and value = a dictionary (where key = sentence 
     and value = set of keywords)"""
+
     def iterate_keywords(self, sentences, complete_keyword_set):
         """Itera uma lista se frases e procura por palavras-chaves em cada frase. Se nenhuma palavra-chave do tipo audio{número} for encontrada,
            retorna um dicionário onde chave = frase e valor = set de palavras-chaves encontradas.
@@ -154,6 +203,7 @@ class ProcessText:
 
     """Process text. Receives a list of keywords, filters raw text from stopwords, lemmatizes filtered text, splits filtered text into sentences, 
        searches for each keyword in each sentence. Returns a dictionary with the results."""
+
     def process_text(self, complete_keyword_list):
         """Processa o texto. Recebe uma lista de palavras-chaves, filtra o texto e retira stopwords, divide o texto filtrado em frases, procura
         por cada palavra-chave em cada frase. Retorna um dicionário com os resultados"""
@@ -168,6 +218,7 @@ class ProcessText:
         return result_dictionary
 
     """Receives a dictionary and prints its items"""
+
     def print_dict_results(self, result_dictionary):
         """Recebe um dicionário e imprime os items"""
         if result_dictionary:
@@ -182,17 +233,11 @@ class ProcessText:
         else:
             print('\nNehuma palavra chave encontrada')
 
-
-with open('..\\TranscriptAudio\\Transcripts\\tiranossauro.txt', 'r') as file:
-    text = file.read()
-processText = ProcessText(text)
-keyword_list = ['frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
-                'localizado', 'localizada', 'promoção', 'custo', 'compra', 'comprar', 'grátis', 'gratuito', 'reais', 'garantia', 'preço',
-                'orçamento', 'revenda', 'brinde', 'comércio', 'comercio']
-
-complete_kw_list = processText.create_keyword_complete_list(keyword_list)
-
-result_dict = processText.process_text(complete_kw_list)
-processText.print_dict_results(result_dict)
-
-
+# fpath = '..\\Transcripts\\anatel_comerciais1.txt'
+# processText = ProcessText(fpath)
+# processText.open_txt_file()
+#
+# complete_kw_list = processText.generate_keyword_complete_list()
+#
+# result_dict = processText.process_text(complete_kw_list)
+# processText.print_dict_results(result_dict)

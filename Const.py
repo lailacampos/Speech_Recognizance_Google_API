@@ -11,26 +11,42 @@ class Const:
     # Transcript audio constants
     QUESTION_AUDIO_MICROPHONE = '\nVocê gostaria de transcrever um arquivo de áudio ou usar o microfone?\n'
     TRANSCRIPT_CHOICES = '[1] - Arquivo de áudio \n[2] - Microfone \n[3] - Retornar ao menu anterior \n[4] - Sair\n'
-    AUDIO_FILE_DIRECTORY = 'O arquivo de áudio deve estar na pasta Audio, contida na mesma '
+    AUDIO_FILE_DIRECTORY = '\nO arquivo de áudio deve estar localizado na pasta "Audio", localizada no mesmo diretório que o executável.\n' \
+                           'Por favor, digite um arquivo do tipo "nome_do_arquivo.wav"\n'
+    FILE_TOO_LARGE = '\nArquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.\n' \
+                     'O arquivo de texto encontra-se na pasta "Transcripts"\n'
     LISTENING = 'Ouvindo...'
     YOU_SAID = 'Você disse: '
 
     # Analyse text constants
-
+    TEXT_FILE_KEYWORD_QUESTION = '\nEscolha uma das opções abaixo:\n'
+    TEXT_FILE_KEYWORD_OPTIONS = '[1] - Analisar um arquivo de texto\n[2] - Listar as palavras-chaves\n[3] - Modificar a lista de palavras chaves\n' \
+                                '[4] - Voltar ao menu anterior\n'
+    TEXT_FILE_LOCATION = '\nO arquivo de texto deve estar localizado dentro da pasta "Transcripts", localizada no mesmo diretório que o executável.\n' \
+                         'Por favor, digite um nome de arquivo do tipo "nome_do_arquivo.txt"\n'
 
     # Closing application constant
     CLOSING_PROGRAM = '\nAté mais!'
+
+    # Directory related constants
+    DIRECTORY_DOES_NOT_EXIST = '\nDiretório não existe\n'
+
+    DIRECTORY_DOES_NOT_EXIST = '\nDiretório não existe\n'
 
     # File related constants
     TYPE_FILE_NAME = 'Por favor digite o nome do arquivo (com extensão): '
     FILE_SAVED = 'O texto foi salvo em um arquivo de nome '
     FILE_ALREADY_EXISTS = 'Um arquivo de texto com este nome já existe. ' \
                           'Por favor digite um novo nome para o arquivo, sem extensão: '
-    FILE_DOES_NOT_EXIST = '\nArquivo não existe.\nDigite um caminho válido:\n'
-    FORMAT_NOT_SUPPORTED = '\nFormato não suportado. Por favor escolha um arquivo válido:\n'
+    FILE_DOES_NOT_EXIST = '\nO arquivo não foi encontrado.\nDigite um caminho de arquivo válido.\n'
+    FORMAT_NOT_SUPPORTED = '\nFormato não suportado. Por favor escolha um arquivo válido.\n'
 
     # New features contants
     FEATURE_NOT_IMPLEMENTED = '\nDesculpe! Essa função ainda não foi implementada. :(\n'
+
+    # Error related constants
+    UNKNOWN_VALUE_GOOGLE_ERROR = f'\nUm erro aconteceu ao transcrever o arquivo.\nGoogle não entendeu o áudio.\n' \
+                                 f'Por favor, tente novamente após tratar o arquivo.\n'
 
     # Visual effect constants
     SEPARATOR = '###################################################################################'
