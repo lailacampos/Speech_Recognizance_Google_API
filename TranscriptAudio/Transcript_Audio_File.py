@@ -122,12 +122,9 @@ class TranscriptAudioFile:
             text += error_msg
             print(Const.SEPARATOR)
             print(error_msg)
-<<<<<<< HEAD
             self.complete_fname = (".\\Transcripts\\" + self.fname).replace('.wav', '.txt')
-=======
             print(Const.SEPARATOR)
             self.complete_fname = ("..\\Transcripts\\" + self.fname).replace('.wav', '.txt')
->>>>>>> analyse-text
             self.save_txt_file(text)
             raise TranscriptSingleFileException()
         finally:
@@ -143,11 +140,8 @@ class TranscriptAudioFile:
         self.fname = self.check_file_name()
         self.fname += '.txt'
 
-<<<<<<< HEAD
         # complete_fname = .\Transcripts\audio_file.txt
-=======
         # complete_file_path = .\Transcripts\audio_file.txt
->>>>>>> analyse-text
         self.complete_fname = '.\\Transcripts\\' + self.fname
 
         try:

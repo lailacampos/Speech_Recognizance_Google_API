@@ -42,10 +42,14 @@ class Menu:
                 """Se o input do usuário for uma opção válida"""
                 return str(choice)
             else:
+                print(Const.SEPARATOR)
                 print(Const.EMPTY_OR_WRONG_CHOICE)
+                print(Const.SEPARATOR)
                 return str(choice)
         else:
+            print(Const.SEPARATOR)
             print(Const.EMPTY_OR_WRONG_CHOICE)
+            print(Const.SEPARATOR)
             return str(choice)
 
     # Checks whether an audio file is an wav file or not
