@@ -1,4 +1,3 @@
-
 import sndhdr
 import os
 from Const import *
@@ -8,6 +7,8 @@ from AnalyseText.ProcessText import *
 
 
 class Menu:
+
+    # TODO Maybe add an ProcessText object as an attribute of the class so the keywords choices will persist?
 
     # Checks if file exists
     @staticmethod
@@ -95,7 +96,9 @@ class Menu:
         # If file does not exist
         if txt_file is None:
             """Se o arquivo não existir"""
+            print(Const.SEPARATOR)
             print(Const.FILE_DOES_NOT_EXIST)
+            print(Const.SEPARATOR)
             return None
 
         else:
@@ -108,7 +111,9 @@ class Menu:
             else:
                 """Se o arquivo existe e não é do tipo .txt"""
 
+                print(Const.SEPARATOR)
                 print(Const.FORMAT_NOT_SUPPORTED)
+                print(Const.SEPARATOR)
                 return None
 
     # Transcripts an audio file
@@ -146,8 +151,43 @@ class Menu:
                 except WriteFileException:
                     raise WriteFileException()
 
-            except TranscriptFileError:
-                raise TranscriptFileError()
+            except TranscriptFileException:
+                raise TranscriptFileException()
+
+    def analyse_text_function(self):
+
+        print(Const.TEXT_FILE_LOCATION)
+
+        # file_name should be: file_name.txt
+        file_name = input(Const.TYPE_FILE_NAME)
+        """file_name deve estar no formato: file_name.txt"""
+
+        complete_file_path = '.\\Transcripts\\' + file_name  # Relative audio file path
+        complete_file_path = self.validate_text_file(complete_file_path)
+
+        if complete_file_path is not None:
+
+            processText = ProcessText(file_name)
+
+            try:
+                processText.open_txt_file()
+                result_dict = processText.process_text()
+                result_text = processText.print_dict_results(result_dict)
+                complete_file_path = '.\\Resultado_Analise_de_Texto\\' + file_name
+                processText.text_file_path = complete_file_path
+                if result_text is not None:
+                    processText.save_txt_file(complete_file_path, result_text)
+                    print(Const.SEPARATOR)
+                    print(Const.TEXT_FILE_SAVE_LOCATION)
+                    print(Const.SEPARATOR)
+
+            except WriteFileException:
+                raise WriteFileException
+
+    @staticmethod
+    def list_keywords_function():
+        procesText = ProcessText('')
+        procesText.print_complete_keyword_list()
 
     # Menu that asks the user to choose between transcribing an audio file or using the microphone
     def transcript_audio_menu(self):
@@ -189,8 +229,80 @@ class Menu:
 
                 # TODO implement capture and transcript microphone input here
                 print(Const.FEATURE_NOT_IMPLEMENTED)
+                print(Const.SEPARATOR)
+                pass
 
         return user_choice
+
+    def analyse_text_menu(self):
+
+        while True:
+
+            print(Const.TEXT_FILE_KEYWORD_QUESTION)
+            user_choice = input(Const.TEXT_FILE_OR_KEYWORD_OPTIONS)
+            user_choice = self.validate_user_input(user_choice, 4)
+
+            # User chose return to previous menu
+            if user_choice == '4':
+                """Usuário escolheu retornar ao menu anterior"""
+
+                print(Const.SEPARATOR)
+                break
+
+            # User chose to analyse a text file
+            elif user_choice == '1':
+                """Usuário escolheu analisar um arquivo de texto"""
+
+                print(Const.SEPARATOR)
+
+                self.analyse_text_function()
+                pass
+
+            # User chose to list keywords
+            elif user_choice == '2':
+                """Usuário escolheu listar as palavras-chaves"""
+
+                print(Const.SEPARATOR)
+
+                self.list_keywords_function()
+                print(Const.SEPARATOR)
+                pass
+
+            # User chose to modify keyword list
+            elif user_choice == '3':
+                """Usuário escolheu modificar a lista de palavras-chaves"""
+
+                # TODO implement modify keyword list here
+                print(Const.SEPARATOR)
+                self.modify_keywords_menu()
+                pass
+
+        return user_choice
+
+    def modify_keywords_menu(self):
+
+        while True:
+            print(Const.TEXT_FILE_KEYWORD_QUESTION)
+            user_choice = input(Const.MODIFY_KEYWORD_OPTIONS)
+            user_choice = self.validate_user_input(user_choice, 2)
+
+            # User chose to add keyword to the list
+            if user_choice == '1':
+                """Usuário escolheu adicionar palavra-chave à lista"""
+
+                print(Const.SEPARATOR)
+                print(Const.FEATURE_NOT_IMPLEMENTED)
+                print(Const.SEPARATOR)
+                break
+
+            # user chose to remove keyword from the list
+            elif user_choice == '2':
+                """Usuário escolheu remover palavra chave da lista"""
+
+                print(Const.SEPARATOR)
+                print(Const.FEATURE_NOT_IMPLEMENTED)
+                print(Const.SEPARATOR)
+                break
 
     # Main menu
     def main_menu(self):
@@ -213,7 +325,6 @@ class Menu:
                 """Usuário escolheu transcrever um áudio"""
                 print(Const.SEPARATOR)
 
-                # TODO Implement transcript audio menu here
                 user_choice = self.transcript_audio_menu()
 
                 # User chose to exit application
@@ -238,87 +349,9 @@ class Menu:
                     """Usuário escolheu retornar ao menu anterior"""
                     continue
 
-
         raise SystemExit()
-
-
-
-    def analyse_text_menu(self):
-
-        while True:
-
-            print(Const.TEXT_FILE_KEYWORD_QUESTION)
-            user_choice = input(Const.TEXT_FILE_KEYWORD_OPTIONS)
-            user_choice = self.validate_user_input(user_choice, 4)
-
-            # User chose return to previous menu
-            if user_choice == '4':
-                """Usuário escolheu retornar ao menu anterior"""
-
-                print(Const.SEPARATOR)
-                break
-
-            # User chose to analyse a text file
-            elif user_choice == '1':
-                """Usuário escolheu analisar um arquivo de texto"""
-
-                # TODO implement process text logic here
-                print(Const.SEPARATOR)
-
-                self.analyse_text_function()
-                pass
-
-            # User chose to list keywords
-            elif user_choice == '2':
-                """Usuário escolheu listar as palavras-chaves"""
-
-                # TODO List all keywords here
-                print(Const.SEPARATOR)
-                print(Const.FEATURE_NOT_IMPLEMENTED)
-                pass
-
-            # User chose to modify keyword list
-            elif user_choice == '3':
-                """Usuário escolheu modificar a lista de palavras-chaves"""
-
-                # TODO implement modify keyword list here
-                print(Const.SEPARATOR)
-                print(Const.FEATURE_NOT_IMPLEMENTED)
-                pass
-
-        return user_choice
-
-
-
-    def analyse_text_function(self):
-
-        print(Const.TEXT_FILE_LOCATION)
-
-        # file_name should be: file_name.txt
-        file_name = input(Const.TYPE_FILE_NAME)
-        """file_name deve estar no formato: file_name.txt"""
-
-        complete_file_path = '.\\Transcripts\\' + file_name  # Relative audio file path
-        complete_file_path = self.validate_text_file(complete_file_path)
-
-        if complete_file_path is not None:
-
-            processText = ProcessText(file_name)
-
-            try:
-                processText.open_txt_file()
-                print(processText.raw_text)
-            except WriteFileException:
-                raise WriteFileException
-
-
-
-
-
 
 
 menu = Menu()
 
-
 menu.main_menu()
-

@@ -69,7 +69,7 @@ if __name__ == '__main__':
                     else:
                         print('\nO arquivo não foi encontrado.\nPor favor digite o nome de um arquivo válido:\n')
                 except Exception:
-                    raise TranscriptFileError()
+                    raise TranscriptFileException()
 
             # Capture input from microphone
             elif choice == '2':

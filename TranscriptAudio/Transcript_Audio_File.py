@@ -120,10 +120,12 @@ class TranscriptAudioFile:
         except Exception:
             error_msg = Const.UNKNOWN_VALUE_GOOGLE_ERROR
             text += error_msg
+            print(Const.SEPARATOR)
             print(error_msg)
+            print(Const.SEPARATOR)
             self.complete_fname = ("..\\Transcripts\\" + self.fname).replace('.wav', '.txt')
             self.save_txt_file(text)
-            raise TranscriptSingleFile()
+            raise TranscriptSingleFileException()
         finally:
             return text
 
@@ -147,13 +149,15 @@ class TranscriptAudioFile:
 
                     # complete_file_path = .\Transcripts\audio_file.txt
                     self.save_txt_file(text)
-                except TranscriptMultipleFiles:
-                    error_msg = f'\nUm erro aconteceu ao transcrever o arquivo audio{index}.\nGoogle não entendeu o áudio.\n' \
-                                f'Por favor, tente novamente após tratar o arquivo.\n'
+                except Exception:
+                    error_msg = Const.UNKNOWN_VALUE_GOOGLE_ERROR
                     text += error_msg
                     print(error_msg)
-        except Exception:
-            raise TranscriptMultipleFiles()
+                    self.complete_fname = ("..\\Transcripts\\" + self.fname).replace('.wav', '.txt')
+                    self.save_txt_file(text)
+                    raise TranscriptMultipleFilesException
+        except TranscriptFileException:
+            raise TranscriptFileException()
         finally:
             return text
 
@@ -182,7 +186,7 @@ class TranscriptAudioFile:
                     text = self.transcript_multiple_files(audio_list)
                     print(Const.FILE_TOO_LARGE)
                 except Exception:
-                    raise TranscriptMultipleFiles()
+                    raise TranscriptMultipleFilesException()
             except Exception:
                 raise SliceFileException()
 
@@ -193,5 +197,5 @@ class TranscriptAudioFile:
                 audio = read_audio_file.read_single_file(self.complete_fname)
                 text = self.transcript_single_file(audio)
             except Exception:
-                raise TranscriptSingleFile
+                raise TranscriptSingleFileException
         return text

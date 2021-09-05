@@ -1,0 +1,2 @@
+'frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
+                              'localizado', 'localizada', 'promoção', 'custo', 'compra',

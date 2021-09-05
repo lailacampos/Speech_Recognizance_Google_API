@@ -1,0 +1,2 @@
+Palavras-chaves: {'apoio', 'localizar', 'avenida', 'custo', 'patrocinio', 'comercial', 'compra', 'frequencia'}
+Texto: ' frequência ' , ' frequencia ' , ' patrocínio ' , ' patrocinio ' , ' apoio ' , ' comercial ' , ' endereço ' , ' avenida ' , ' localização ' , ' localizar ' , ' localizar ' , ' promoção ' , ' custo ' , ' compra ' ,

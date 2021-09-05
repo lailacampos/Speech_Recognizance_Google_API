@@ -12,6 +12,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from AnalyseText.Regex_Search import RegexSearch
 from TranscriptAudio.FileExceptions import *
+from Const import *
 
 
 class ProcessText:
@@ -158,7 +159,6 @@ class ProcessText:
         return full_keyword_string
 
     """Takes a keyword word and appends it to a list of keywords. Returns a list of keywords"""
-
     def generate_keyword_complete_list(self):
         """Recebe uma palavra-chave a adiciona a uma lista de palavras-chaves. Retorna a lista de palavras-chaves"""
 
@@ -166,6 +166,27 @@ class ProcessText:
         lemmatized_keyword_list = self.lemmatize_text(keyword_string)
         complete_kw_list = list(set(self.concatenate_key_words(lemmatized_keyword_list)))
         return complete_kw_list
+
+    """Prints a each list in a list of keywords"""
+    def print_complete_keyword_list(self):
+        """Imprime cada palavra-chave em uma lista de palavras-chaves"""
+
+        keyword_string = self.turn_list_into_string(self.keyword_list)
+        lemmatized_keyword_list = self.lemmatize_text(keyword_string)
+        complete_kw_list = list(set(self.concatenate_key_words(lemmatized_keyword_list)))
+
+        print(Const.SEPARATOR)
+        print(Const.LIST_KEYWORDS_INFO)
+        for keyword in complete_kw_list:
+            print(keyword)
+
+    def add_keyword_to_list(self):
+        # TODO implement method to add keyword to list
+        pass
+
+    def remove_keyword_from_list(self):
+        # TODO implement method to remove keyword from list
+        pass
 
     """Iterates over a list of sentences and searches for keywords in each sentence. If no audio{number} keywords are found, returns a dictionary
     where key = sentence and value = set of keywords found.
@@ -204,10 +225,11 @@ class ProcessText:
     """Process text. Receives a list of keywords, filters raw text from stopwords, lemmatizes filtered text, splits filtered text into sentences, 
        searches for each keyword in each sentence. Returns a dictionary with the results."""
 
-    def process_text(self, complete_keyword_list):
+    def process_text(self):
         """Processa o texto. Recebe uma lista de palavras-chaves, filtra o texto e retira stopwords, divide o texto filtrado em frases, procura
         por cada palavra-chave em cada frase. Retorna um dicionário com os resultados"""
         rs = RegexSearch()
+        complete_keyword_list = self.generate_keyword_complete_list()
         filtered_list = self.filter_stop_words()
         filtered_string = self.turn_list_into_string(filtered_list)
         lemmatized_list = self.lemmatize_text(filtered_string)
@@ -221,17 +243,25 @@ class ProcessText:
 
     def print_dict_results(self, result_dictionary):
         """Recebe um dicionário e imprime os items"""
+
+        final_text = ''
         if result_dictionary:
             if self.audio_keyword_dictionary:
                 for key, value in result_dictionary.items():
                     for k, v in value.items():
-                        print(f'{key} - {v} {k}\n')
-
+                        final_text += f'\n{key} - {v} {k}\n'
+                        # print(f'{key} - {v} {k}\n')
+                print(final_text)
             else:
+                final_text = 'Palavras-chaves: '
                 for key, value in result_dictionary.items():
-                    print(f'{value} {key}')
+                    final_text += f'{value}\nTexto: {key}\n'
+                    # print(f'{value} {key}')
+                    print(final_text)
+            return final_text
         else:
-            print('\nNehuma palavra chave encontrada')
+            print(Const.NO_KEYWORD_FOUND)
+            return None
 
 # fpath = '..\\Transcripts\\anatel_comerciais1.txt'
 # processText = ProcessText(fpath)
