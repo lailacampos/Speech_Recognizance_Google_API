@@ -2,6 +2,7 @@
 
 import speech_recognition as sr
 from pathlib import Path
+from Const import *
 
 
 class ReadAudioFile:
@@ -33,7 +34,7 @@ class ReadAudioFile:
     def read_single_file(self, complete_fname):
         """Lê um único arquivo de áudio"""
 
-        # complete_fname = .\Audio\audio_file.wav
+        # complete_file_path = .\Audio\audio_file.wav
         audio_file = sr.AudioFile(complete_fname)
 
         # Opens the file and reads its contents, storing the data in an AudioFile instance called source.
@@ -52,14 +53,14 @@ class ReadAudioFile:
 
         # fname = audio_file.txt
         fname = self.check_file_name(fname).replace('.txt', '')
-        directory_path = f'.\\Sliced_Audio_Files\\{fname}'
+        directory_path = f'.\\Audio\\Sliced_Audio_Files\\{fname}'
 
         # Check if directory exists:
         if Path(directory_path).is_dir():
             i = 0
 
             # Set path to first audio file
-            # complete_fname = .\Sliced_Audio_Files\audio_file\audio{number}.wav
+            # complete_file_path = .\Sliced_Audio_Files\audio_file\audio{number}.wav
             complete_fname = directory_path + '\\' + f'audio{i}.wav'
 
             # While there are files in folder, reads audio files
@@ -73,5 +74,5 @@ class ReadAudioFile:
                 i += 1
                 complete_fname = directory_path + '\\' + f'audio{i}.wav'
         else:
-            print('\nDiretório não existe\n')
+            print(Const.DIRECTORY_DOES_NOT_EXIST)
         return audio_list
