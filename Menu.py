@@ -350,8 +350,3 @@ class Menu:
                     continue
 
         raise SystemExit()
-
-
-menu = Menu()
-
-menu.main_menu()

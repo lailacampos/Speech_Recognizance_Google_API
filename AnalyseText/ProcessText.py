@@ -262,12 +262,3 @@ class ProcessText:
         else:
             print(Const.NO_KEYWORD_FOUND)
             return None
-
-# fpath = '..\\Transcripts\\anatel_comerciais1.txt'
-# processText = ProcessText(fpath)
-# processText.open_txt_file()
-#
-# complete_kw_list = processText.generate_keyword_complete_list()
-#
-# result_dict = processText.process_text(complete_kw_list)
-# processText.print_dict_results(result_dict)

@@ -46,7 +46,7 @@ class SliceAudioFile:
         for i in file_formats:
             if i in fname:
                 fname = fname.replace(i, '')
-        directory = '.\\Audio\\Sliced_Audio_Files\\' + fname
+        directory = f'.\\Audio\\Sliced_Audio_Files\\{fname}'
         if Path(directory).is_dir():
             print('Pasta já existe.')
         else:

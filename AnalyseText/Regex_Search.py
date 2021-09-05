@@ -36,15 +36,3 @@ class RegexSearch:
             dict_matches[i] = i.__getitem__(0)
         return dict_matches
 
-
-# with open('..\\TranscriptAudio\\Transcripts\\anatel_comerciais1.txt', 'r') as file:
-#     text = file.read()
-#
-# regexSearch = RegexSearch()
-# sentences = regexSearch.split_string_by_regex(text)
-# audio_keywords = regexSearch.find_audio_keywords(text)
-# # for i in sentences:
-# #     print(i)
-# for k, v in audio_keywords.items():
-#     print(f'key = {k} -- value = {v}')
-

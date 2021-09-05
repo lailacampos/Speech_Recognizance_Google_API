@@ -15,7 +15,7 @@ class Const:
     FILE_TOO_LARGE = '\nArquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.\n' \
                      'O arquivo de texto encontra-se na pasta "Transcripts"\n'
     LISTENING = 'Ouvindo...'
-    YOU_SAID = '\nTranscrição\n: '
+    YOU_SAID = '\nTranscrição:\n'
 
     # Analyse text constants
     TEXT_FILE_KEYWORD_QUESTION = '\nEscolha uma das opções abaixo:\n'
