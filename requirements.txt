@@ -1,3 +1,26 @@
+altgraph==0.17
+certifi==2021.5.30
+charset-normalizer==2.0.4
+click==8.0.1
+colorama==0.4.4
+future==0.18.2
+idna==3.2
+joblib==1.0.1
+nltk==3.6.2
+numpy==1.21.2
+pefile==2021.5.24
+protobuf==3.17.3
 PyAudio @ file:///D:/Downloads/Programs/Programming/PyAudio-0.2.11-cp39-cp39-win_amd64.whl
 pydub==0.25.1
+pyinstaller==4.5.1
+pyinstaller-hooks-contrib==2021.3
+pywin32-ctypes==0.2.0
+regex==2021.8.28
+requests==2.26.0
+six==1.16.0
 SpeechRecognition==3.8.1
+stanza==1.2.3
+torch==1.9.0
+tqdm==4.62.2
+typing-extensions==3.10.0.2
+urllib3==1.26.6

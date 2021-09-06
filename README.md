@@ -19,6 +19,19 @@ pip install SpeechRecognition
 pip install pydub
 ```
 ###
+
+####Stanza
+```
+pip install stanza
+```
+###
+
+####Nltk
+```
+pip install nltk install
+```
+###
+
 ####PyAudio
 Download corresponding PyAudio wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/
 

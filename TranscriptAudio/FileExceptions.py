@@ -8,19 +8,19 @@ class GeneralException(Exception):
         super().__init__(self.msg)
 
 
-class TranscriptFileError(Exception):
+class TranscriptFileException(Exception):
     def __init__(self, msg='Error while transcripting file'):
         self.msg = msg
         super().__init__(self.msg)
 
 
-class TranscriptSingleFile(Exception):
+class TranscriptSingleFileException(Exception):
     def __init__(self, msg='Error while transcripting single file'):
         self.msg = msg
         super().__init__(self.msg)
 
 
-class TranscriptMultipleFiles(Exception):
+class TranscriptMultipleFilesException(Exception):
     def __init__(self, msg='Error while transcripting multiple files'):
         self.msg = msg
         super().__init__(self.msg)
