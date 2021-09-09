@@ -10,7 +10,7 @@
 
 # import contextlib
 import math
-# import wave
+import os
 from TranscriptAudio.FileExceptions import *
 from pathlib import Path
 from pydub import AudioSegment
@@ -42,12 +42,10 @@ class SliceAudioFile:
         file_formats = ['.wav', '.aiff', '.aiffc', '.flac']
 
         # fpath = .\Audio\audio_file.wav
-        fname = self.fpath.replace('.\\Audio\\', '')
+        fname = os.path.basename(self.fpath)
         for i in file_formats:
             if i in fname:
                 fname = fname.replace(i, '')
-
-        directory = '.\\Sliced_Audio_Files\\' + fname
 
         directory = f'.\\Audio\\Sliced_Audio_Files\\{fname}'
 
@@ -59,6 +57,9 @@ class SliceAudioFile:
 
     @staticmethod
     def create_directory(directory):
+
+        # directory should be: \\Audio\\Sliced_Audio_Files\\file_name
+
         # https://docs.python.org/3/library/pathlib.html#pathlib.Path.mkdir
         Path(directory).mkdir(parents=True, exist_ok=True)
 

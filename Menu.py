@@ -1,9 +1,14 @@
+
 import sndhdr
 import os
+
+import Const
 from Const import *
 from TranscriptAudio.Transcript_Audio_File import *
 from TranscriptAudio.FileExceptions import *
 from AnalyseText.ProcessText import *
+from tkinter import Tk     # from tkinter import Tk for Python 3.x
+from tkinter.filedialog import askopenfilename
 
 
 class Menu:
@@ -52,6 +57,7 @@ class Menu:
             print(Const.SEPARATOR)
             return str(choice)
 
+    # TODO This function is obsolete and should be deleted
     # Checks whether an audio file is an wav file or not
     def validate_wav_audio_file(self, complete_file_path):
         """Checa de um arquivo de áudio é do formato wav"""
@@ -91,6 +97,7 @@ class Menu:
                 print(Const.SEPARATOR)
                 return None
 
+    # TODO This function is obsolete and should be deleted
     # Checks if file is a .txt file
     def validate_text_file(self, complete_file_path):
         """Checa se um arquivo é do tipo .txt"""
@@ -123,14 +130,22 @@ class Menu:
     # Transcripts an audio file
     def transcript_audio_file_function(self):
 
-        print(Const.AUDIO_FILE_DIRECTORY)
+        root = Tk()
+        root.attributes("-topmost", True)
+        root.withdraw()
+
+        print(Const.CHOOSE_AUDIO_FILE)
+        input(Const.PRESS_ENTER)
+
+        # file_name = input(Const.TYPE_FILE_NAME)
+
+        # complete_file_path = '.\\Audio\\' + file_name  # Relative audio file path
+        complete_file_path = askopenfilename()
+        complete_file_path = self.validate_wav_audio_file(complete_file_path)
 
         # file_name should be: file_name.wav
-        file_name = input(Const.TYPE_FILE_NAME)
+        file_name = os.path.basename(complete_file_path)
         """file_name deve estar no formato: nome_do_arquivo.wav"""
-
-        complete_file_path = '.\\Audio\\' + file_name  # Relative audio file path
-        complete_file_path = self.validate_wav_audio_file(complete_file_path)
 
         if complete_file_path is not None:
 
@@ -148,6 +163,9 @@ class Menu:
                 try:
                     # file_name should be: file_name.wav
                     file_name = transcript_audio_file_obj.check_file_name()  # file_name should be: file_name
+
+                    # Tk().withdraw()
+                    # complete_file_path = askopenfilename()
                     complete_file_path = '.\\Transcripts\\' + file_name + '.txt'
                     transcript_audio_file_obj.complete_fname = complete_file_path
                     transcript_audio_file_obj.save_txt_file(text)
@@ -160,14 +178,21 @@ class Menu:
 
     def analyse_text_function(self):
 
-        print(Const.TEXT_FILE_LOCATION)
+        Tk().withdraw()
+        print(Const.CHOOSE_TEXT_FILE)
+        input(Const.PRESS_ENTER)
+
+        # print(Const.TEXT_FILE_LOCATION)
+
+        # file_name = input(Const.TYPE_FILE_NAME)
+
+        complete_file_path = askopenfilename()
+        # complete_file_path = '.\\Transcripts\\' + file_name  # Relative audio file path
+        complete_file_path = self.validate_text_file(complete_file_path)
 
         # file_name should be: file_name.txt
-        file_name = input(Const.TYPE_FILE_NAME)
+        file_name = os.path.basename(complete_file_path)
         """file_name deve estar no formato: file_name.txt"""
-
-        complete_file_path = '.\\Transcripts\\' + file_name  # Relative audio file path
-        complete_file_path = self.validate_text_file(complete_file_path)
 
         if complete_file_path is not None:
 
@@ -190,8 +215,8 @@ class Menu:
 
     @staticmethod
     def list_keywords_function():
-        procesText = ProcessText('')
-        procesText.print_complete_keyword_list()
+        processText = ProcessText('')
+        processText.print_complete_keyword_list()
 
     # Menu that asks the user to choose between transcribing an audio file or using the microphone
     def transcript_audio_menu(self):
@@ -223,7 +248,6 @@ class Menu:
                 print(Const.SEPARATOR)
 
                 self.transcript_audio_file_function()
-                pass
 
             # User chose to use the microphone
             elif user_choice == '2':
@@ -234,7 +258,6 @@ class Menu:
                 # TODO implement capture and transcript microphone input here
                 print(Const.FEATURE_NOT_IMPLEMENTED)
                 print(Const.SEPARATOR)
-                pass
 
         return user_choice
 
@@ -260,7 +283,6 @@ class Menu:
                 print(Const.SEPARATOR)
 
                 self.analyse_text_function()
-                pass
 
             # User chose to list keywords
             elif user_choice == '2':
@@ -270,7 +292,6 @@ class Menu:
 
                 self.list_keywords_function()
                 print(Const.SEPARATOR)
-                pass
 
             # User chose to modify keyword list
             elif user_choice == '3':
@@ -279,7 +300,6 @@ class Menu:
                 # TODO implement modify keyword list here
                 print(Const.SEPARATOR)
                 self.modify_keywords_menu()
-                pass
 
         return user_choice
 
@@ -324,7 +344,7 @@ class Menu:
                 print(Const.CLOSING_PROGRAM)
                 break
 
-            # User chose to ranscript audio
+            # User chose to transcript audio
             elif audio_or_text_choice == '1':
                 """Usuário escolheu transcrever um áudio"""
                 print(Const.SEPARATOR)
