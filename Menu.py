@@ -143,38 +143,43 @@ class Menu:
         complete_file_path = askopenfilename()
         complete_file_path = self.validate_wav_audio_file(complete_file_path)
 
-        # file_name should be: file_name.wav
-        file_name = os.path.basename(complete_file_path)
-        """file_name deve estar no formato: nome_do_arquivo.wav"""
-
         if complete_file_path is not None:
+            # file_name should be: file_name.wav
+            file_name = os.path.basename(complete_file_path)
+            """file_name deve estar no formato: nome_do_arquivo.wav"""
 
-            transcript_audio_file_obj = TranscriptAudioFile(file_name, complete_file_path)
+            if file_name is not None:
 
-            try:
-                # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts multiple
-                # slices files.
-                text = transcript_audio_file_obj.determine_single_or_multiple_transcript()
-                """Checa o tamanho do arquivo de áudio, decide se o arquivo precisa ser divido em partes menores e ou transcreve um único arquivo ou
-                   transcreve múltiplos arquivos menores"""
-
-                transcript_audio_file_obj.fname = transcript_audio_file_obj.fname.replace('.txt', '')
+                transcript_audio_file_obj = TranscriptAudioFile(file_name, complete_file_path)
 
                 try:
-                    # file_name should be: file_name.wav
-                    file_name = transcript_audio_file_obj.check_file_name()  # file_name should be: file_name
+                    # Checks file size, decides whether the file needs to be sliced and either transcripts a single file or transcripts multiple
+                    # slices files.
+                    text = transcript_audio_file_obj.determine_single_or_multiple_transcript()
+                    """Checa o tamanho do arquivo de áudio, decide se o arquivo precisa ser divido em partes menores e ou transcreve um único arquivo ou
+                       transcreve múltiplos arquivos menores"""
 
-                    # Tk().withdraw()
-                    # complete_file_path = askopenfilename()
-                    complete_file_path = '.\\Transcripts\\' + file_name + '.txt'
-                    transcript_audio_file_obj.complete_fname = complete_file_path
-                    transcript_audio_file_obj.save_txt_file(text)
+                    transcript_audio_file_obj.fname = transcript_audio_file_obj.fname.replace('.txt', '')
 
-                except WriteFileException:
-                    raise WriteFileException()
+                    try:
+                        # file_name should be: file_name.wav
+                        file_name = transcript_audio_file_obj.check_file_name()  # file_name should be: file_name
 
-            except TranscriptFileException:
-                raise TranscriptFileException()
+                        # Tk().withdraw()
+                        # complete_file_path = askopenfilename()
+                        complete_file_path = '.\\Transcripts\\' + file_name + '.txt'
+                        transcript_audio_file_obj.complete_fname = complete_file_path
+                        transcript_audio_file_obj.save_txt_file(text)
+
+                    except WriteFileException:
+                        raise WriteFileException()
+
+                except TranscriptFileException:
+                    raise TranscriptFileException()
+
+        else:
+            print(Const.NO_FILE_CHOSEN)
+            print(Const.SEPARATOR)
 
     def analyse_text_function(self):
 
@@ -190,28 +195,32 @@ class Menu:
         # complete_file_path = '.\\Transcripts\\' + file_name  # Relative audio file path
         complete_file_path = self.validate_text_file(complete_file_path)
 
-        # file_name should be: file_name.txt
-        file_name = os.path.basename(complete_file_path)
-        """file_name deve estar no formato: file_name.txt"""
-
         if complete_file_path is not None:
+            # file_name should be: file_name.txt
+            file_name = os.path.basename(complete_file_path)
+            """file_name deve estar no formato: file_name.txt"""
 
-            processText = ProcessText(file_name)
+            if file_name is not None:
 
-            try:
-                processText.open_txt_file()
-                result_dict = processText.process_text()
-                result_text = processText.print_dict_results(result_dict)
-                complete_file_path = '.\\Resultado_Analise_de_Texto\\' + file_name
-                processText.text_file_path = complete_file_path
-                if result_text is not None:
-                    processText.save_txt_file(complete_file_path, result_text)
-                    print(Const.SEPARATOR)
-                    print(Const.TEXT_FILE_SAVE_LOCATION)
-                    print(Const.SEPARATOR)
+                processText = ProcessText(file_name)
 
-            except WriteFileException:
-                raise WriteFileException
+                try:
+                    processText.open_txt_file()
+                    result_dict = processText.process_text()
+                    result_text = processText.print_dict_results(result_dict)
+                    complete_file_path = '.\\Resultado_Analise_de_Texto\\' + file_name
+                    processText.text_file_path = complete_file_path
+                    if result_text is not None:
+                        processText.save_txt_file(complete_file_path, result_text)
+                        print(Const.SEPARATOR)
+                        print(Const.TEXT_FILE_SAVE_LOCATION)
+                        print(Const.SEPARATOR)
+
+                except WriteFileException:
+                    raise WriteFileException
+        else:
+            print(Const.NO_FILE_CHOSEN)
+            print(Const.SEPARATOR)
 
     @staticmethod
     def list_keywords_function():
