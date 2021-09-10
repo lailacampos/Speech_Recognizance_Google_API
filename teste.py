@@ -11,5 +11,8 @@ user_input = input('Type something: ')
 filepath = askopenfilename(parent=root)  # show an "Open" dialog box and return the path to the selected file
 print(filepath)
 
+directory_of_file = os.path.dirname(filepath)
+print(directory_of_file)
+
 filename = os.path.basename(filepath)
 print(filename)
