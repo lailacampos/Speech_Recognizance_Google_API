@@ -15,7 +15,7 @@ class Const:
                            'Por favor, digite um arquivo do tipo "nome_do_arquivo.wav"\n'
     CHOOSE_AUDIO_FILE = '\nPor favor selecione um arquivo de audio do tipo wav.\n'
     FILE_TOO_LARGE = '\nArquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.\n' \
-                     'O arquivo de texto encontra-se na pasta "Transcripts"\n'
+                     'O arquivo de texto foi salvo na pasta "Transcripts", no mesmo diretório que o executável\n'
     LISTENING = 'Ouvindo...'
     YOU_SAID = '\nTranscrição:\n'
 

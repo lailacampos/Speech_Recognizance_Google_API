@@ -12,6 +12,8 @@ from nltk.corpus import stopwords
 from AnalyseText.Regex_Search import RegexSearch
 from TranscriptAudio.FileExceptions import *
 from Const import *
+from pathlib import Path
+import os
 
 
 class ProcessText:
@@ -79,13 +81,34 @@ class ProcessText:
         except WriteFileException:
             raise WriteFileException
 
-    # Saves processed raw_text to a txt file located in the folder Results, inside package AnalyseText
+    # Check if a directory exists
+    def check_if_directory_exists(self, complete_fname):
+        """Checa se o diretório existe"""
+
+        directory = os.path.dirname(complete_fname)
+
+        if not Path(directory).is_dir():
+            self.create_directory(directory)
+        return directory
+
+    # Creates a directory
     @staticmethod
-    def save_txt_file(complete_fname, new_text):
+    def create_directory(directory):
+        """Cria um diretório"""
+
+        # directory should be: .\\Resultado_Analise_de_Texto
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
+    # Saves processed raw_text to a txt file located in the folder Results, inside package AnalyseText
+    def save_txt_file(self, complete_fname, new_text):
         """Salva um texto processado em um arquivo txt localizado na pasta Results, dentro do pacote AnalyseText"""
 
         try:
-            # complete_file_path = .\\Results\\fname.txt
+            fname = os.path.basename(complete_fname)
+
+            # complete_file_path should be = .\\Resultado_Analise_de_Texto\\fname.txt
+            complete_fname = self.check_if_directory_exists(complete_fname)
+            complete_fname = complete_fname + '\\' + fname
             with open(complete_fname, 'w') as file:
                 file.write(new_text)
         except WriteFileException as e:

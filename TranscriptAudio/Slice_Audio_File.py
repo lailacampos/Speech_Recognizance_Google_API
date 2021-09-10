@@ -58,8 +58,6 @@ class SliceAudioFile:
     @staticmethod
     def create_directory(directory):
 
-        # directory should be: \\Audio\\Sliced_Audio_Files\\file_name
-
         # https://docs.python.org/3/library/pathlib.html#pathlib.Path.mkdir
         Path(directory).mkdir(parents=True, exist_ok=True)
 
