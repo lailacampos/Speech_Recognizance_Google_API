@@ -20,7 +20,7 @@ class ProcessText:
 
     def __init__(self, text_file_name):
         self._text_file_name = text_file_name
-        self._text_file_path = '.\\Transcripts\\' + text_file_name
+        self._text_file_path = ''
         self._raw_text = ""
         self._audio_keyword_dictionary = dict()
         self._keyword_list = ['frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
@@ -224,9 +224,11 @@ class ProcessText:
                     if self.audio_keyword_dictionary:
                         # each_value = audio{number}
                         for each_value in self.audio_keyword_dictionary.values():
+
                             if each_value in sentences[index - 1] and sentences[index - 1] != '':
                                 # Dictionary where key = audio{number} and value = a dictionary (where key = sentence and value = set of keywords)
                                 audio_nested_dictionary[each_value] = keyword_dict
+
         if self.audio_keyword_dictionary:
             return audio_nested_dictionary
         else:

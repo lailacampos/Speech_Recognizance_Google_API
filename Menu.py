@@ -203,6 +203,7 @@ class Menu:
             if file_name is not None:
 
                 processText = ProcessText(file_name)
+                processText.text_file_path = complete_file_path
 
                 try:
                     processText.open_txt_file()
