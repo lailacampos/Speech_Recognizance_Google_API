@@ -15,7 +15,6 @@ from Const import *
 from pathlib import Path
 import os
 
-
 class ProcessText:
 
     def __init__(self, text_file_name):
@@ -70,6 +69,8 @@ class ProcessText:
         self._keyword_list = new_kw_list
 
     # endregion
+
+    #
 
     # Opens and reads a text file
     def open_txt_file(self):
@@ -152,7 +153,7 @@ class ProcessText:
     def lemmatize_text(filtered_text):
         """Recebe uma string e reduz todas as palavras da mesma ao seu significado base (lematizar). Retorna uma lista de palavras lematizadas."""
 
-        npl = stanza.Pipeline('Pt')
+        npl = stanza.Pipeline(lang='Pt', model_dir='.\\Stanza')
         doc = npl(filtered_text)
         lemmatized_words_list = [doc_word.lemma for sentence in doc.sentences for doc_word in sentence.words]
         return lemmatized_words_list
