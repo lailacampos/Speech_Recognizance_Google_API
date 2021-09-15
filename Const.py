@@ -1,6 +1,8 @@
 class Const:
     # General constants
     EMPTY_OR_WRONG_CHOICE = '\nPor favor, digite uma opção válida.\n'
+    PRESS_ENTER = '\nPressione qualquer tecla para continuar...\n'
+    NO_FILE_CHOSEN = '\nNenhum arquivo escolhido.\n'
 
     # Analyse text or transcript audio constants
     QUESTION_TRANSCRIPT_OR_ANALYSE_TEXT = '\nVocê gostaria de transcrever um ' \
@@ -12,8 +14,9 @@ class Const:
     TRANSCRIPT_CHOICES = '[1] - Arquivo de áudio \n[2] - Microfone \n[3] - Retornar ao menu anterior \n[4] - Sair\n'
     AUDIO_FILE_DIRECTORY = '\nO arquivo de áudio deve estar localizado na pasta "Audio", localizada no mesmo diretório que o executável.\n' \
                            'Por favor, digite um arquivo do tipo "nome_do_arquivo.wav"\n'
+    CHOOSE_AUDIO_FILE = '\nPor favor selecione um arquivo de audio do tipo wav.\n'
     FILE_TOO_LARGE = '\nArquivo muito grande ou muito longo. O arquivo de audio foi dividido em várias partes.\n' \
-                     'O arquivo de texto encontra-se na pasta "Transcripts"\n'
+                     'O arquivo de texto foi salvo na pasta "Transcripts", no mesmo diretório que o executável\n'
     LISTENING = 'Ouvindo...'
     YOU_SAID = '\nTranscrição:\n'
 
@@ -25,6 +28,7 @@ class Const:
     MODIFY_KEYWORD_OPTIONS = '[1] - Adicionar palavra-chave à lista\n[2] - Remover palavra-chave da lista\n'
     TEXT_FILE_LOCATION = '\nO arquivo de texto deve estar localizado dentro da pasta "Transcripts", localizada no mesmo diretório que o executável.\n' \
                          'Por favor, digite um nome de arquivo do tipo "nome_do_arquivo.txt"\n'
+    CHOOSE_TEXT_FILE = '\nPor favor selecione um arquivo do tipo txt\n'
     NO_KEYWORD_FOUND = '\nNenhuma palavra chave encontrada'
     TEXT_FILE_SAVE_LOCATION = '\nO arquivo foi salvo na pasta "Resultado_Analise_de_Texto", localizada no mesmo diretório que o executável.\n'
 

@@ -7,19 +7,19 @@
 # https://www.analyticsvidhya.com/blog/2020/11/words-that-matter-a-simple-guide-to-keyword-extraction-in-python/
 
 import stanza
-from TranscriptAudio.FileExceptions import *
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from AnalyseText.Regex_Search import RegexSearch
 from TranscriptAudio.FileExceptions import *
 from Const import *
-
+from pathlib import Path
+import os
 
 class ProcessText:
 
     def __init__(self, text_file_name):
         self._text_file_name = text_file_name
-        self._text_file_path = '.\\Transcripts\\' + text_file_name
+        self._text_file_path = ''
         self._raw_text = ""
         self._audio_keyword_dictionary = dict()
         self._keyword_list = ['frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
@@ -70,8 +70,9 @@ class ProcessText:
 
     # endregion
 
-    """Opens and reads a text file"""
+    #
 
+    # Opens and reads a text file
     def open_txt_file(self):
         """Abre e lê um arquivo de texto"""
 
@@ -81,32 +82,53 @@ class ProcessText:
         except WriteFileException:
             raise WriteFileException
 
-    """Saves processed raw_text to a txt file located in the folder Results, inside package AnalyseText"""
+    # Check if a directory exists
+    def check_if_directory_exists(self, complete_fname):
+        """Checa se o diretório existe"""
 
+        directory = os.path.dirname(complete_fname)
+
+        if not Path(directory).is_dir():
+            self.create_directory(directory)
+        return directory
+
+    # Creates a directory
+    @staticmethod
+    def create_directory(directory):
+        """Cria um diretório"""
+
+        # directory should be: .\\Resultado_Analise_de_Texto
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
+    # Saves processed raw_text to a txt file located in the folder Results, inside package AnalyseText
     def save_txt_file(self, complete_fname, new_text):
         """Salva um texto processado em um arquivo txt localizado na pasta Results, dentro do pacote AnalyseText"""
 
         try:
-            # complete_file_path = .\\Results\\fname.txt
+            fname = os.path.basename(complete_fname)
+
+            # complete_file_path should be = .\\Resultado_Analise_de_Texto\\fname.txt
+            complete_fname = self.check_if_directory_exists(complete_fname)
+            complete_fname = complete_fname + '\\' + fname
             with open(complete_fname, 'w') as file:
                 file.write(new_text)
         except WriteFileException as e:
             print(f'Exception: {e}')
 
-    """Tokenization is the process of breaking up the original raw raw_text into component pieces which are known as tokens.
-       Tokenização é o process de quebrar o texto original em pedaços conhecidos como tokens.
-       Breaks a raw_text into a list of words"""
+    # Tokenization is the process of breaking up the original raw raw_text into component pieces which are known as tokens.
+    # Tokenização é o process de quebrar o texto original em pedaços conhecidos como tokens.
 
+    # Breaks a raw_text into a list of words
     def tokenize_raw_text(self):
         """Quebra um texto e o transforma em uma lista de palavras"""
 
         words = word_tokenize(self.raw_text)
         return words
 
-    """Stopwords are words which are filtered out before or after processing of natural language data.
-       Stopwords são palavras que são filtradas e retiradas do texto analisado antes ou depois do processamento de linguagem natural.
-       Filters a list of words from stop words and returns a filtered list. Returns a filtered list."""
+    # Stopwords are words which are filtered out before or after processing of natural language data.
+    # Stopwords são palavras que são filtradas e retiradas do texto analisado antes ou depois do processamento de linguagem natural.
 
+    # Filters a list of words from stop words and returns a filtered list. Returns a filtered list.
     def filter_stop_words(self):
         """Filtra um lista de palavras e remove stopwords. Devolve uma lista filtrada"""
 
@@ -115,8 +137,7 @@ class ProcessText:
         filtered_text_list = [word for word in words if word.casefold() not in stop_words]
         return filtered_text_list
 
-    """Turns a list of word tokens into a string"""
-
+    # Turns a list of word tokens into a string
     @staticmethod
     def turn_list_into_string(words_list):
         """Transforma uma lista de tokens (palavras) em uma string"""
@@ -124,15 +145,16 @@ class ProcessText:
         result_string = ' '.join(str(item) for item in words_list)
         return result_string
 
-    """Lemmatization is the process of reducing words to their core meaning
-    Lematização é o processo de reduzir palavras ao seu significado base"""
+    # Lemmatization is the process of reducing words to their core meaning
+    # Lematização é o processo de reduzir palavras ao seu significado base
 
     @staticmethod
     # Takes a string and reduces all the words to their core meaning (lemmatize). Returns a list of lemmatized words.
     def lemmatize_text(filtered_text):
         """Recebe uma string e reduz todas as palavras da mesma ao seu significado base (lematizar). Retorna uma lista de palavras lematizadas."""
 
-        npl = stanza.Pipeline('Pt')
+        # npl = stanza.Pipeline(lang='Pt', model_dir='.\\Stanza')
+        npl = stanza.Pipeline(lang='Pt'g)
         doc = npl(filtered_text)
         lemmatized_words_list = [doc_word.lemma for sentence in doc.sentences for doc_word in sentence.words]
         return lemmatized_words_list
@@ -149,8 +171,7 @@ class ProcessText:
 
         self.keyword_list.remove(keyword_word)
 
-    """Concatenates two lists. Returns the resulting list"""
-
+    # Concatenates two lists. Returns the resulting list
     def concatenate_key_words(self, lemmatized_keyword_list):
         """Concatena duas listas. Retorna a lista resultante"""
 
@@ -158,7 +179,7 @@ class ProcessText:
         full_keyword_string.sort()
         return full_keyword_string
 
-    """Takes a keyword word and appends it to a list of keywords. Returns a list of keywords"""
+    # Takes a keyword word and appends it to a list of keywords. Returns a list of keywords
     def generate_keyword_complete_list(self):
         """Recebe uma palavra-chave a adiciona a uma lista de palavras-chaves. Retorna a lista de palavras-chaves"""
 
@@ -167,7 +188,7 @@ class ProcessText:
         complete_kw_list = list(set(self.concatenate_key_words(lemmatized_keyword_list)))
         return complete_kw_list
 
-    """Prints a each list in a list of keywords"""
+    # Prints a each list in a list of keywords
     def print_complete_keyword_list(self):
         """Imprime cada palavra-chave em uma lista de palavras-chaves"""
 
@@ -180,19 +201,10 @@ class ProcessText:
         for keyword in complete_kw_list:
             print(keyword)
 
-    def add_keyword_to_list(self):
-        # TODO implement method to add keyword to list
-        pass
-
-    def remove_keyword_from_list(self):
-        # TODO implement method to remove keyword from list
-        pass
-
-    """Iterates over a list of sentences and searches for keywords in each sentence. If no audio{number} keywords are found, returns a dictionary
-    where key = sentence and value = set of keywords found.
-    If audio{number} keywords are found, returns a dictionary where key = audio{number} and value = a dictionary (where key = sentence 
-    and value = set of keywords)"""
-
+    # Iterates over a list of sentences and searches for keywords in each sentence. If no audio{number} keywords are found, returns a dictionary
+    # where key = sentence and value = set of keywords found.
+    # If audio{number} keywords are found, returns a dictionary where key = audio{number} and value = a dictionary (where key = sentence
+    # and value = set of keywords)
     def iterate_keywords(self, sentences, complete_keyword_set):
         """Itera uma lista se frases e procura por palavras-chaves em cada frase. Se nenhuma palavra-chave do tipo audio{número} for encontrada,
            retorna um dicionário onde chave = frase e valor = set de palavras-chaves encontradas.
@@ -214,17 +226,18 @@ class ProcessText:
                     if self.audio_keyword_dictionary:
                         # each_value = audio{number}
                         for each_value in self.audio_keyword_dictionary.values():
+
                             if each_value in sentences[index - 1] and sentences[index - 1] != '':
                                 # Dictionary where key = audio{number} and value = a dictionary (where key = sentence and value = set of keywords)
                                 audio_nested_dictionary[each_value] = keyword_dict
+
         if self.audio_keyword_dictionary:
             return audio_nested_dictionary
         else:
             return keyword_dict
 
-    """Process text. Receives a list of keywords, filters raw text from stopwords, lemmatizes filtered text, splits filtered text into sentences, 
-       searches for each keyword in each sentence. Returns a dictionary with the results."""
-
+    # Process text. Receives a list of keywords, filters raw text from stopwords, lemmatizes filtered text, splits filtered text into sentences,
+    # searches for each keyword in each sentence. Returns a dictionary with the results.
     def process_text(self):
         """Processa o texto. Recebe uma lista de palavras-chaves, filtra o texto e retira stopwords, divide o texto filtrado em frases, procura
         por cada palavra-chave em cada frase. Retorna um dicionário com os resultados"""
@@ -239,8 +252,7 @@ class ProcessText:
         result_dictionary = self.iterate_keywords(sentences, complete_keyword_list)
         return result_dictionary
 
-    """Receives a dictionary and prints its items"""
-
+    # Receives a dictionary and prints its items
     def print_dict_results(self, result_dictionary):
         """Recebe um dicionário e imprime os items"""
 

@@ -6,6 +6,7 @@
 # https://realpython.com/python-speech-recognition/
 
 import contextlib
+import os
 import wave
 # from Slice_Audio_File import SliceAudioFile
 from TranscriptAudio.Slice_Audio_File import SliceAudioFile
@@ -99,10 +100,34 @@ class TranscriptAudioFile:
         file_lenght = self.check_file_lenght()
         return {'size_mb': file_size_mb, 'length': file_lenght}
 
+    # Checks if directory exists
+    def check_if_directory_exists(self):
+        """Checa se o diretório existe"""
+
+        # complete_fname should be: '.\\Transcripts'
+        directory = os.path.dirname(self.complete_fname)
+
+        if not Path(directory).is_dir():
+            self.create_directory(directory)
+        return directory
+
+    # Cria um diretório
+    @staticmethod
+    def create_directory(directory):
+        """Cria um diretório"""
+
+        # https://docs.python.org/3/library/pathlib.html#pathlib.Path.mkdir
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
     def save_txt_file(self, text):
         """Salva um arquivo de texto no disco"""
         try:
-            # complete.fname = .\Transcripts\audio_file.txt
+            file_name = os.path.basename(self.complete_fname)
+            self.complete_fname = self.check_if_directory_exists()
+
+            # complete_fname should be: '.\\Transcripts'
+
+            self.complete_fname = self.complete_fname + '\\' + file_name
             with open(self.complete_fname, 'w') as txt_file:
                 txt_file.write(text)
         except Exception:
@@ -155,7 +180,7 @@ class TranscriptAudioFile:
                     error_msg = Const.UNKNOWN_VALUE_GOOGLE_ERROR
                     text += error_msg
                     print(error_msg)
-                    self.complete_fname = ("..\\Transcripts\\" + self.fname).replace('.wav', '.txt')
+                    self.complete_fname = (".\\Transcripts\\" + self.fname).replace('.wav', '.txt')
                     self.save_txt_file(text)
                     raise TranscriptMultipleFilesException
         except TranscriptFileException:
