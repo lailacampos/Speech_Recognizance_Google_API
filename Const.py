@@ -2,6 +2,7 @@ class Const:
     # General constants
     EMPTY_OR_WRONG_CHOICE = '\nPor favor, digite uma opção válida.\n'
     PRESS_ENTER = '\nPressione qualquer tecla para continuar...\n'
+    NO_FILE_CHOSEN = '\nNenhum arquivo escolhido.\n'
 
     # Analyse text or transcript audio constants
     QUESTION_TRANSCRIPT_OR_ANALYSE_TEXT = '\nVocê gostaria de transcrever um ' \

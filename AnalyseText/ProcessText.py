@@ -15,12 +15,11 @@ from Const import *
 from pathlib import Path
 import os
 
-
 class ProcessText:
 
     def __init__(self, text_file_name):
         self._text_file_name = text_file_name
-        self._text_file_path = '.\\Transcripts\\' + text_file_name
+        self._text_file_path = ''
         self._raw_text = ""
         self._audio_keyword_dictionary = dict()
         self._keyword_list = ['frequência', 'frequencia', 'patrocínio', 'patrocinio', 'apoio', 'comercial', 'endereço', 'avenida', 'localização',
@@ -70,6 +69,8 @@ class ProcessText:
         self._keyword_list = new_kw_list
 
     # endregion
+
+    #
 
     # Opens and reads a text file
     def open_txt_file(self):
@@ -152,7 +153,8 @@ class ProcessText:
     def lemmatize_text(filtered_text):
         """Recebe uma string e reduz todas as palavras da mesma ao seu significado base (lematizar). Retorna uma lista de palavras lematizadas."""
 
-        npl = stanza.Pipeline('Pt')
+        # npl = stanza.Pipeline(lang='Pt', model_dir='.\\Stanza')
+        npl = stanza.Pipeline(lang='Pt')
         doc = npl(filtered_text)
         lemmatized_words_list = [doc_word.lemma for sentence in doc.sentences for doc_word in sentence.words]
         return lemmatized_words_list
@@ -224,9 +226,11 @@ class ProcessText:
                     if self.audio_keyword_dictionary:
                         # each_value = audio{number}
                         for each_value in self.audio_keyword_dictionary.values():
+
                             if each_value in sentences[index - 1] and sentences[index - 1] != '':
                                 # Dictionary where key = audio{number} and value = a dictionary (where key = sentence and value = set of keywords)
                                 audio_nested_dictionary[each_value] = keyword_dict
+
         if self.audio_keyword_dictionary:
             return audio_nested_dictionary
         else:
