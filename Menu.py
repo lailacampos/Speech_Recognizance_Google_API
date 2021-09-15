@@ -199,6 +199,7 @@ class Menu:
             # file_name should be: file_name.txt
             file_name = os.path.basename(complete_file_path)
             """file_name deve estar no formato: file_name.txt"""
+<<<<<<< HEAD
 
             if file_name is not None:
 
@@ -217,6 +218,25 @@ class Menu:
                         print(Const.TEXT_FILE_SAVE_LOCATION)
                         print(Const.SEPARATOR)
 
+=======
+
+            if file_name is not None:
+
+                processText = ProcessText(file_name)
+
+                try:
+                    processText.open_txt_file()
+                    result_dict = processText.process_text()
+                    result_text = processText.print_dict_results(result_dict)
+                    complete_file_path = '.\\Resultado_Analise_de_Texto\\' + file_name
+                    processText.text_file_path = complete_file_path
+                    if result_text is not None:
+                        processText.save_txt_file(complete_file_path, result_text)
+                        print(Const.SEPARATOR)
+                        print(Const.TEXT_FILE_SAVE_LOCATION)
+                        print(Const.SEPARATOR)
+
+>>>>>>> 26c204216b8da78861326223de8e5c83f8715190
                 except WriteFileException:
                     raise WriteFileException
         else:
