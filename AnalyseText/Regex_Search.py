@@ -21,15 +21,8 @@ class RegexSearch:
     # Define the search pattern as the word 'audio' followed by any number of digits, with at least one occurrence of a digit
     def define_audio_re_obj(self):
         """Define o padrão de busca como a palavra \"audio\" seguida de qualquer número de dígitos, sendo necessário ao menos um digito"""
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         self.re_obj = re.compile(r'\b(audio[0-9]+)\b')
-=======
-        self.re_obj = re.compile(r'\baudio[0-9]+\b')
->>>>>>> 26c204216b8da78861326223de8e5c83f8715190
-=======
-        self.re_obj = re.compile(r'\b(audio[0-9]+)\b')
->>>>>>> create-exe
 
     def split_string_by_regex(self, string):
         self.define_audio_re_obj()

@@ -153,6 +153,7 @@ class ProcessText:
     def lemmatize_text(filtered_text):
         """Recebe uma string e reduz todas as palavras da mesma ao seu significado base (lematizar). Retorna uma lista de palavras lematizadas."""
 
+        # npl = stanza.Pipeline(lang='Pt', model_dir='.\\Stanza')
         npl = stanza.Pipeline('Pt')
         doc = npl(filtered_text)
         lemmatized_words_list = [doc_word.lemma for sentence in doc.sentences for doc_word in sentence.words]
