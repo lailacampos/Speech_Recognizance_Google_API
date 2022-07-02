@@ -1,6 +1,8 @@
 # Speech_Recognizance_Google_API
 
-Speech Recognizance python project using SpeechRecognition library and default Google Speech API key.
+Windows application with Python using natural language processing and speech recognition libraries as well as libraries for audio processing.
+
+The main goal of the application is to transcribe audio recordings to text and to analyze the generated text using natural language processing and search for given keywords as well as identify common patterns.
 
 
 ---
